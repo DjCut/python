@@ -2,27 +2,6 @@ isClick = False
 position1 = ""
 position2 = ""
 
-class Pawn:
-
-    def __init__(self, positionX, positionY, color):
-        #NbOfCreatedObject = 0
-        #NbOfCreatedObject += 1
-        self.positionX = positionX
-        self.positionY = positionY
-        self.color = color
-        #self.name = "P"+NbOfCreatedObject+color
-
-
-# initialize all white pawns
-for i in range(0, 8):
-    varPawn = Pawn(1, i, 'white')
-    print(varPawn.__dict__)
-
-# initialize all black pawns
-for i in range(0, 8):
-    varPawn = Pawn(6, i, 'black')
-    print(varPawn.__dict__)
-
 # On initialise le plateau 8*8 avec des x
 l = 8; c = 8
 Plateau = [['x']*l for i in range(c)]
@@ -64,6 +43,27 @@ Plateau[7][5]='Fb2'
 Plateau[7][6]='Cb2'
 Plateau[7][7]='Tb2'
 
+class Pawn:
+
+    def __init__(self, row, column, color):
+        #NbOfCreatedObject = 0
+        #NbOfCreatedObject += 1
+        self.row = row
+        self.column = column
+        self.color = color
+        self.name = 'Pawn'
+
+
+# initialize all white pawns
+for i in range(0, 8):
+    Plateau[1][i] = Pawn(1, i, 'white')
+    print(Plateau[1][i].column)
+
+# initialize all black pawns
+for i in range(0, 8):
+    Plateau[6][i] = Pawn(6, i, 'black')
+    #print(varPawn.__dict__)
+
 # Affichage du Plateau de jeu
 import tkinter
 
@@ -84,7 +84,7 @@ def Click(event):
         print (positionX, positionY)
         print(isClick)
         isClick = True
-        PossibleMove()
+        #PossibleMove()
     else:
         print ("Click 2 OK!")
         position2 = event.widget
