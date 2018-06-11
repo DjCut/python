@@ -16,24 +16,6 @@ Plateau[0][5]='Fn2'
 Plateau[0][6]='Cn2'
 Plateau[0][7]='Tn2'
 
-Plateau[1][0]='Pn1'
-Plateau[1][1]='Pn2'
-Plateau[1][2]='Pn3'
-Plateau[1][3]='Pn4'
-Plateau[1][4]='Pn5'
-Plateau[1][5]='Pn6'
-Plateau[1][6]='Pn7'
-Plateau[1][7]='Pn8'
-
-Plateau[6][0]='Pb1'
-Plateau[6][1]='Pb2'
-Plateau[6][2]='Pb3'
-Plateau[6][3]='Pb4'
-Plateau[6][4]='Pb5'
-Plateau[6][5]='Pb6'
-Plateau[6][6]='Pb7'
-Plateau[6][7]='Pb8'
-
 Plateau[7][0]='Tb1'
 Plateau[7][1]='Cb1'
 Plateau[7][2]='Fb1'
@@ -43,11 +25,17 @@ Plateau[7][5]='Fb2'
 Plateau[7][6]='Cb2'
 Plateau[7][7]='Tb2'
 
+class Piece:
+
+    def __init__(self, row, column, color):
+        self.row = row
+        self.column = column
+        self.color = color
+
+
 class Pawn:
 
     def __init__(self, row, column, color):
-        #NbOfCreatedObject = 0
-        #NbOfCreatedObject += 1
         self.row = row
         self.column = column
         self.color = color
@@ -64,10 +52,13 @@ for i in range(0, 8):
     Plateau[6][i] = Pawn(6, i, 'black')
     #print(varPawn.__dict__)
 
+
+
+
 # Affichage du Plateau de jeu
 import tkinter
+from tkinter import *
 
-from tkinter import * 
 Window = Tk()
 
 for ligne in range(8):
