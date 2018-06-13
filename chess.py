@@ -1,10 +1,32 @@
+#############################################
+# PROGRAM
+#############################################
+
+import tkinter
+from tkinter import *
+
+Window = Tk()
+
+#############################################
+# VARIABLES
+#############################################
+
 isClick = False
 position1 = ""
 position2 = ""
 
+#############################################
+# PLATEAU
+#############################################
+
 # On initialise le plateau 8*8 avec des x
-l = 8; c = 8
-Plateau = [[]*l for i in range(c)]
+Plateau = [['x']*8 for i in range(8)]
+
+
+#############################################
+# CLASS
+#############################################
+
 
 class Piece:
 
@@ -15,13 +37,9 @@ class Piece:
 
 
 class Pawn(Piece):
-<<<<<<< HEAD
 
-    def __init__(self):
-=======
     def __init__(self, row, column, color):
         Piece.__init__(self, row, column, color)
->>>>>>> a71168fd1290f2ce444c020e7f543d1e9296bdd5
         self.name = 'Pawn'
 
 
@@ -55,10 +73,15 @@ class King(Piece):
         self.name = 'King'
 
 
+#############################################
+# OBJECTS
+#############################################
+
+
 # initialize white pawns
 for i in range(0, 8):
     Plateau[1][i] = Pawn(1, i, 'white')
-    print(Plateau[1][i].column)
+    #print(Plateau[1][i].column)
 
 # initialize black pawns
 for i in range(0, 8):
@@ -71,32 +94,55 @@ Plateau[0][7] = Rook(0, 7, 'white')
 Plateau[7][0] = Rook(7, 0, 'black')
 Plateau[7][7] = Rook(7, 7, 'black')
 
-# initialize knight
+# initialize knights
 Plateau[0][1] = Knight(0, 1, 'white')
 Plateau[0][6] = Knight(0, 6, 'white')
 Plateau[7][1] = Knight(7, 1, 'black')
 Plateau[7][6] = Knight(7, 6, 'black')
 
+# initialize Bishops
+Plateau[0][2] = Bishop(0, 2, 'white')
+Plateau[0][5] = Bishop(0, 5, 'white')
+Plateau[7][2] = Bishop(7, 2, 'black')
+Plateau[7][5] = Bishop(7, 5, 'black')
+
+# initialize Queens
+Plateau[0][3] = Queen(0, 3, 'white')
+Plateau[7][4] = Queen(7, 4, 'black')
+
+# initialize Kings
+Plateau[0][4] = King(0, 4, 'white')
+Plateau[7][3] = King(7, 3, 'black')
 
 
+##################################
 # Affichage du Plateau de jeu
-import tkinter
-from tkinter import *
-
-Window = Tk()
-
+##################################
+pawn = PhotoImage(file="Pawn.gif")
 for ligne in range(8):
     for colonne in range(8):
-        Button(Window, width=8, height=4, text=Plateau[ligne][colonne], borderwidth=1).grid(row=ligne, column=colonne)
+
+        if Plateau[ligne][colonne] == 'x':
+            Button(Window, width=60, height=60, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Pawn':
+
+            Button(Window, width=60, height=60, image=pawn, borderwidth=1).grid(row=ligne, column=colonne)
+        else:
+
+            Button(Window, width=60, height=60, image=pawn, borderwidth=1).grid(row=ligne, column=colonne)
 
 
+##################################
+# Fonctions
+##################################
 def Click(event):
     global isClick, position1, position2
     if isClick == False:
         print("Click 1 OK!")
         positionX = Button.grid_info(event.widget)['row']
         positionY = Button.grid_info(event.widget)['column']
-        print (positionX, positionY)
+        print(positionX, positionY)
+        print(Plateau[positionX][positionY].name)
         print(isClick)
         isClick = True
         #PossibleMove()
