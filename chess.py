@@ -1,3 +1,4 @@
+
 #############################################
 # PROGRAM
 #############################################
@@ -14,6 +15,20 @@ Window = Tk()
 isClick = False
 position1 = ""
 position2 = ""
+bg = 'false'
+
+pawnW = PhotoImage(file="pawnW.gif")
+pawnB = PhotoImage(file="pawnB.gif")
+rookW = PhotoImage(file="rookW.gif")
+rookB = PhotoImage(file="rookB.gif")
+knightW = PhotoImage(file="knightW.gif")
+knightB = PhotoImage(file="knightB.gif")
+bishopW = PhotoImage(file="bishopW.gif")
+bishopB = PhotoImage(file="bishopB.gif")
+queenW = PhotoImage(file="queenW.gif")
+queenB = PhotoImage(file="queenB.gif")
+kingW = PhotoImage(file="kingW.gif")
+kingB = PhotoImage(file="kingB.gif")
 
 #############################################
 # PLATEAU
@@ -118,19 +133,43 @@ Plateau[7][3] = King(7, 3, 'black')
 ##################################
 # Affichage du Plateau de jeu
 ##################################
-pawn = PhotoImage(file="Pawn.gif")
+
 for ligne in range(8):
     for colonne in range(8):
 
-        if Plateau[ligne][colonne] == 'x':
-            Button(Window, width=60, height=60, borderwidth=1).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Pawn':
-
-            Button(Window, width=60, height=60, image=pawn, borderwidth=1).grid(row=ligne, column=colonne)
+        if bg == 'true':
+            background = 'green'
+            bg = 'false'
         else:
+            background = 'white'
+            bg = 'true'
 
-            Button(Window, width=60, height=60, image=pawn, borderwidth=1).grid(row=ligne, column=colonne)
-
+        if Plateau[ligne][colonne] == 'x':
+            Button(Window, width=8, height=4, text='', bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'white':
+            Button(Window, width=60, height=60, image=pawnW, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'black':
+            Button(Window, width=60, height=60, image=pawnB, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'white':
+            Button(Window, width=60, height=60, image=rookW, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'black':
+            Button(Window, width=60, height=60, image=rookB, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'white':
+            Button(Window, width=60, height=60, image=knightW, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'black':
+            Button(Window, width=60, height=60, image=knightB, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'white':
+            Button(Window, width=60, height=60, image=bishopW, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'black':
+            Button(Window, width=60, height=60, image=bishopB, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'white':
+            Button(Window, width=60, height=60, image=queenW, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'black':
+            Button(Window, width=60, height=60, image=queenB, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'white':
+            Button(Window, width=60, height=60, image=kingW, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
+        elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'black':
+            Button(Window, width=60, height=60, image=kingB, bg=background, borderwidth=1).grid(row=ligne, column=colonne)
 
 ##################################
 # Fonctions
