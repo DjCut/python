@@ -33,12 +33,9 @@ class Piece:
         self.color = color
 
 
-class Pawn:
+class Pawn(Piece):
 
-    def __init__(self, row, column, color):
-        self.row = row
-        self.column = column
-        self.color = color
+    def __init__(self):
         self.name = 'Pawn'
 
 
