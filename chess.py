@@ -4,26 +4,7 @@ position2 = ""
 
 # On initialise le plateau 8*8 avec des x
 l = 8; c = 8
-Plateau = [['x']*l for i in range(c)]
-
-# On place les pièces
-Plateau[0][0]='Tn1'
-Plateau[0][1]='Cn1'
-Plateau[0][2]='Fn1'
-Plateau[0][3]='Qn'
-Plateau[0][4]='Kn'
-Plateau[0][5]='Fn2'
-Plateau[0][6]='Cn2'
-Plateau[0][7]='Tn2'
-
-Plateau[7][0]='Tb1'
-Plateau[7][1]='Cb1'
-Plateau[7][2]='Fb1'
-Plateau[7][3]='Qb'
-Plateau[7][4]='Kb'
-Plateau[7][5]='Fb2'
-Plateau[7][6]='Cb2'
-Plateau[7][7]='Tb2'
+Plateau = [[]*l for i in range(c)]
 
 class Piece:
 
@@ -34,21 +15,67 @@ class Piece:
 
 
 class Pawn(Piece):
+<<<<<<< HEAD
 
     def __init__(self):
+=======
+    def __init__(self, row, column, color):
+        Piece.__init__(self, row, column, color)
+>>>>>>> a71168fd1290f2ce444c020e7f543d1e9296bdd5
         self.name = 'Pawn'
 
 
-# initialize all white pawns
+class Rook(Piece):
+    def __init__(self, row, column, color):
+        Piece.__init__(self, row, column, color)
+        self.name = 'Rook'
+
+
+class Knight(Piece):
+    def __init__(self, row, column, color):
+        Piece.__init__(self, row, column, color)
+        self.name = 'Knight'
+
+
+class Bishop(Piece):
+    def __init__(self, row, column, color):
+        Piece.__init__(self, row, column, color)
+        self.name = 'Bishop'
+
+
+class Queen(Piece):
+    def __init__(self, row, column, color):
+        Piece.__init__(self, row, column, color)
+        self.name = 'Queen'
+
+
+class King(Piece):
+    def __init__(self, row, column, color):
+        Piece.__init__(self, row, column, color)
+        self.name = 'King'
+
+
+# initialize white pawns
 for i in range(0, 8):
     Plateau[1][i] = Pawn(1, i, 'white')
     print(Plateau[1][i].column)
 
-# initialize all black pawns
+# initialize black pawns
 for i in range(0, 8):
     Plateau[6][i] = Pawn(6, i, 'black')
     #print(varPawn.__dict__)
 
+# initialize rooks
+Plateau[0][0] = Rook(0, 0, 'white')
+Plateau[0][7] = Rook(0, 7, 'white')
+Plateau[7][0] = Rook(7, 0, 'black')
+Plateau[7][7] = Rook(7, 7, 'black')
+
+# initialize knight
+Plateau[0][1] = Knight(0, 1, 'white')
+Plateau[0][6] = Knight(0, 6, 'white')
+Plateau[7][1] = Knight(7, 1, 'black')
+Plateau[7][6] = Knight(7, 6, 'black')
 
 
 
