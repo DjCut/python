@@ -195,5 +195,4 @@ def Click(event):
         isClick = False  
 
 Window.bind("<Button-1>", Click)
-Window.wm_attributes("-transparentcolor", "black")
 Window.mainloop()
