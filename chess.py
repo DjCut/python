@@ -139,7 +139,7 @@ for ligne in range(8):
 
         # Damier du plateau
         if bg == 'true':
-            background = 'green'
+            background = 'bisque2'
             if colonne != 7:
                 bg = 'false'
         else:
@@ -193,6 +193,7 @@ def Click(event):
         position2 = event.widget
         print(isClick) 
         isClick = False  
+
 
 Window.bind("<Button-1>", Click)
 Window.mainloop()
