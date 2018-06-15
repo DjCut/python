@@ -17,18 +17,18 @@ position1 = ""
 position2 = ""
 bg = 'false'
 
-pawnW = PhotoImage(file="pawnW.gif")
-pawnB = PhotoImage(file="pawnB.gif")
-rookW = PhotoImage(file="rookW.gif")
-rookB = PhotoImage(file="rookB.gif")
-knightW = PhotoImage(file="knightW.gif")
-knightB = PhotoImage(file="knightB.gif")
-bishopW = PhotoImage(file="bishopW.gif")
-bishopB = PhotoImage(file="bishopB.gif")
-queenW = PhotoImage(file="queenW.gif")
-queenB = PhotoImage(file="queenB.gif")
-kingW = PhotoImage(file="kingW.gif")
-kingB = PhotoImage(file="kingB.gif")
+pawnW = PhotoImage(file="pictures/pawnW.gif")
+pawnB = PhotoImage(file="pictures/pawnB.gif")
+rookW = PhotoImage(file="pictures/rookW.gif")
+rookB = PhotoImage(file="pictures/rookB.gif")
+knightW = PhotoImage(file="pictures/knightW.gif")
+knightB = PhotoImage(file="pictures/knightB.gif")
+bishopW = PhotoImage(file="pictures/bishopW.gif")
+bishopB = PhotoImage(file="pictures/bishopB.gif")
+queenW = PhotoImage(file="pictures/queenW.gif")
+queenB = PhotoImage(file="pictures/queenB.gif")
+kingW = PhotoImage(file="pictures/kingW.gif")
+kingB = PhotoImage(file="pictures/kingB.gif")
 
 #############################################
 # PLATEAU
