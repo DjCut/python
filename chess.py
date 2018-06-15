@@ -35,8 +35,7 @@ kingB = PhotoImage(file="pictures/kingB.gif")
 #############################################
 
 # On initialise le plateau 8*8 avec des x
-Plateau = [['x']*8 for i in range(8)]
-
+Plateau = [[None]*8 for i in range(8)]
 
 #############################################
 # CLASS
@@ -69,6 +68,58 @@ class Knight(Piece):
         Piece.__init__(self, row, column, color)
         self.name = 'Knight'
 
+    def possibleMove(self, positionX, positionY):
+        possibleMove = []
+
+        if 7 >= positionX - 2 >= 0:
+            if 7 >= positionY + 1 >= 0:
+                if Plateau[positionX - 2][positionY + 1] is None:
+                    possibleMove.append(positionX - 2)
+                    possibleMove.append(positionY + 1)
+
+        if 7 >= positionX - 1 >= 0:
+            if 7 >= positionY + 2 >= 0:
+                if Plateau[positionX - 1][positionY + 2] is None:
+                    possibleMove.append(positionX - 1)
+                    possibleMove.append(positionY + 2)
+
+        if 7 >= positionX + 1 >= 0:
+            if 7 >= positionY + 2 >= 0:
+                if Plateau[positionX + 1][positionY + 2] is None:
+                    possibleMove.append(positionX + 1)
+                    possibleMove.append(positionY + 2)
+
+        if 7 >= positionX + 2 >= 0:
+            if 7 >= positionY + 1 >= 0:
+                if Plateau[positionX + 2][positionY + 1] is None:
+                    possibleMove.append(positionX + 2)
+                    possibleMove.append(positionY + 1)
+
+        if 7 >= positionX + 2 >= 0:
+            if 7 >= positionY - 1 >= 0:
+                if Plateau[positionX + 2][positionY - 1] is None:
+                    possibleMove.append(positionX + 2)
+                    possibleMove.append(positionY - 1)
+
+        if 7 >= positionX + 1 >= 0:
+            if 7 >= positionY - 2 >= 0:
+                if Plateau[positionX + 1][positionY - 2] is None:
+                    possibleMove.append(positionX + 1)
+                    possibleMove.append(positionY - 2)
+
+        if 7 >= positionX - 1 >= 0:
+            if 7 >= positionY - 2 >= 0:
+                if Plateau[positionX - 1][positionY - 2] is None:
+                    possibleMove.append(positionX - 1)
+                    possibleMove.append(positionY - 2)
+
+        if 7 >= positionX - 2 >= 0:
+            if 7 >= positionY - 1 >= 0:
+                if Plateau[positionX - 2][positionY - 1] is None:
+                    possibleMove.append(positionX - 2)
+                    possibleMove.append(positionY - 1)
+
+        print("Possible Move: ", possibleMove)
 
 class Bishop(Piece):
     def __init__(self, row, column, color):
@@ -147,7 +198,7 @@ for ligne in range(8):
             if colonne != 7:
                 bg = 'true'
 
-        if Plateau[ligne][colonne] == 'x':
+        if Plateau[ligne][colonne] is None:
             Button(Window, width=8, height=4, text='', bg=background, borderwidth=0).grid(row=ligne, column=colonne)
         elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'white':
             Button(Window, width=60, height=60, image=pawnW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
@@ -183,11 +234,16 @@ def Click(event):
         print("Click 1 OK!")
         positionX = Button.grid_info(event.widget)['row']
         positionY = Button.grid_info(event.widget)['column']
-        print(positionX, positionY)
-        print(Plateau[positionX][positionY].name)
-        print(isClick)
+
+
+        if Plateau[positionX][positionY] is not None:
+            print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
+            Plateau[positionX][positionY].possibleMove(positionX, positionY)
+        else:
+            print('No piece at row:', positionX, 'and column:', positionY)
+
+        #print(isClick)
         isClick = True
-        #PossibleMove()
     else:
         print ("Click 2 OK!")
         position2 = event.widget
