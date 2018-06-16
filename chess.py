@@ -6,30 +6,6 @@
 import tkinter
 from tkinter import *
 
-Window = Tk()
-
-#############################################
-# VARIABLES
-#############################################
-
-isClick = False
-position1 = ""
-position2 = ""
-bg = 'false'
-
-pawnW = PhotoImage(file="pictures/pawnW.gif")
-pawnB = PhotoImage(file="pictures/pawnB.gif")
-rookW = PhotoImage(file="pictures/rookW.gif")
-rookB = PhotoImage(file="pictures/rookB.gif")
-knightW = PhotoImage(file="pictures/knightW.gif")
-knightB = PhotoImage(file="pictures/knightB.gif")
-bishopW = PhotoImage(file="pictures/bishopW.gif")
-bishopB = PhotoImage(file="pictures/bishopB.gif")
-queenW = PhotoImage(file="pictures/queenW.gif")
-queenB = PhotoImage(file="pictures/queenB.gif")
-kingW = PhotoImage(file="pictures/kingW.gif")
-kingB = PhotoImage(file="pictures/kingB.gif")
-
 #############################################
 # PLATEAU
 #############################################
@@ -43,7 +19,6 @@ Plateau = [[None]*8 for i in range(8)]
 
 
 class Piece:
-
     def __init__(self, row, column, color):
         self.row = row
         self.column = column
@@ -51,7 +26,6 @@ class Piece:
 
 
 class Pawn(Piece):
-
     def __init__(self, row, column, color):
         Piece.__init__(self, row, column, color)
         self.name = 'Pawn'
@@ -70,54 +44,24 @@ class Knight(Piece):
 
     def possibleMove(self, positionX, positionY):
         possibleMove = []
-
-        if 7 >= positionX - 2 >= 0:
-            if 7 >= positionY + 1 >= 0:
-                if Plateau[positionX - 2][positionY + 1] is None:
-                    possibleMove.append(positionX - 2)
-                    possibleMove.append(positionY + 1)
-
-        if 7 >= positionX - 1 >= 0:
-            if 7 >= positionY + 2 >= 0:
-                if Plateau[positionX - 1][positionY + 2] is None:
-                    possibleMove.append(positionX - 1)
-                    possibleMove.append(positionY + 2)
-
-        if 7 >= positionX + 1 >= 0:
-            if 7 >= positionY + 2 >= 0:
-                if Plateau[positionX + 1][positionY + 2] is None:
-                    possibleMove.append(positionX + 1)
-                    possibleMove.append(positionY + 2)
-
-        if 7 >= positionX + 2 >= 0:
-            if 7 >= positionY + 1 >= 0:
-                if Plateau[positionX + 2][positionY + 1] is None:
-                    possibleMove.append(positionX + 2)
-                    possibleMove.append(positionY + 1)
-
-        if 7 >= positionX + 2 >= 0:
-            if 7 >= positionY - 1 >= 0:
-                if Plateau[positionX + 2][positionY - 1] is None:
-                    possibleMove.append(positionX + 2)
-                    possibleMove.append(positionY - 1)
-
-        if 7 >= positionX + 1 >= 0:
-            if 7 >= positionY - 2 >= 0:
-                if Plateau[positionX + 1][positionY - 2] is None:
-                    possibleMove.append(positionX + 1)
-                    possibleMove.append(positionY - 2)
-
-        if 7 >= positionX - 1 >= 0:
-            if 7 >= positionY - 2 >= 0:
-                if Plateau[positionX - 1][positionY - 2] is None:
-                    possibleMove.append(positionX - 1)
-                    possibleMove.append(positionY - 2)
-
-        if 7 >= positionX - 2 >= 0:
-            if 7 >= positionY - 1 >= 0:
-                if Plateau[positionX - 2][positionY - 1] is None:
-                    possibleMove.append(positionX - 2)
-                    possibleMove.append(positionY - 1)
+        j = 0
+        for i in range(-2, 3):
+            if i == -2: j = 1
+            if i == -1: j = 2
+            if i == 1: j = 2
+            if i == 2: j = 1
+            if i == 0: continue
+            if 7 >= positionX + i >= 0:
+                if 7 >= positionY + j >= 0:
+                    if Plateau[positionX + i][positionY + j] is None:
+                        possibleMove.append(positionX + i)
+                        possibleMove.append(positionY + j)
+                        j *= (-1)
+            if 7 >= positionX + i >= 0:
+                if 7 >= positionY + j >= 0:
+                    if Plateau[positionX + i][positionY + j] is None:
+                        possibleMove.append(positionX + i)
+                        possibleMove.append(positionY + j)
 
         print("Possible Move: ", possibleMove)
 
@@ -147,12 +91,10 @@ class King(Piece):
 # initialize white pawns
 for i in range(0, 8):
     Plateau[1][i] = Pawn(1, i, 'white')
-    #print(Plateau[1][i].column)
 
 # initialize black pawns
 for i in range(0, 8):
     Plateau[6][i] = Pawn(6, i, 'black')
-    #print(varPawn.__dict__)
 
 # initialize rooks
 Plateau[0][0] = Rook(0, 0, 'white')
@@ -173,12 +115,40 @@ Plateau[7][2] = Bishop(7, 2, 'black')
 Plateau[7][5] = Bishop(7, 5, 'black')
 
 # initialize Queens
-Plateau[0][3] = Queen(0, 3, 'white')
+Plateau[0][4] = Queen(0, 4, 'white')
 Plateau[7][4] = Queen(7, 4, 'black')
 
 # initialize Kings
-Plateau[0][4] = King(0, 4, 'white')
+Plateau[0][3] = King(0, 3, 'white')
 Plateau[7][3] = King(7, 3, 'black')
+
+#############################################
+# TKINTER
+#############################################
+
+Window = Tk()
+
+#############################################
+# VARIABLES
+#############################################
+
+player = 'white'
+isClick = False
+PieceActivated = None
+bg = 'false'
+
+pawnW = PhotoImage(file="pictures/pawnW.gif")
+pawnB = PhotoImage(file="pictures/pawnB.gif")
+rookW = PhotoImage(file="pictures/rookW.gif")
+rookB = PhotoImage(file="pictures/rookB.gif")
+knightW = PhotoImage(file="pictures/knightW.gif")
+knightB = PhotoImage(file="pictures/knightB.gif")
+bishopW = PhotoImage(file="pictures/bishopW.gif")
+bishopB = PhotoImage(file="pictures/bishopB.gif")
+queenW = PhotoImage(file="pictures/queenW.gif")
+queenB = PhotoImage(file="pictures/queenB.gif")
+kingW = PhotoImage(file="pictures/kingW.gif")
+kingB = PhotoImage(file="pictures/kingB.gif")
 
 
 ##################################
@@ -229,27 +199,43 @@ for ligne in range(8):
 # Fonctions
 ##################################
 def Click(event):
-    global isClick, position1, position2
+    global isClick, player, PieceActivated
     if isClick == False:
         print("Click 1 OK!")
         positionX = Button.grid_info(event.widget)['row']
         positionY = Button.grid_info(event.widget)['column']
 
+        PieceActivated = Plateau[positionX][positionY]
+        print(PieceActivated)
 
         if Plateau[positionX][positionY] is not None:
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
-            Plateau[positionX][positionY].possibleMove(positionX, positionY)
+            if Plateau[positionX][positionY].color == player:
+                isClick = True
+                Plateau[positionX][positionY].possibleMove(positionX, positionY)
+                Plateau[positionX][positionY] = None
         else:
             print('No piece at row:', positionX, 'and column:', positionY)
 
-        #print(isClick)
-        isClick = True
     else:
         print ("Click 2 OK!")
-        position2 = event.widget
-        print(isClick) 
-        isClick = False  
+        positionX = Button.grid_info(event.widget)['row']
+        positionY = Button.grid_info(event.widget)['column']
 
+        if Plateau[positionX][positionY] is None:
+            Plateau[positionX][positionY] = PieceActivated
+            PieceActivated.row = positionX
+            PieceActivated.column = positionY
+            print(PieceActivated)
+            isClick = False
 
+        # Player change
+        if player == 'white':
+            player = 'black'
+            return
+        if player == 'black':
+            player = 'white'
+
+# Left Click calls the function Click
 Window.bind("<Button-1>", Click)
 Window.mainloop()
