@@ -135,7 +135,7 @@ Window = Tk()
 player = 'white'
 isClick = False
 PieceActivated = None
-bg = 'false'
+
 
 pawnW = PhotoImage(file="pictures/pawnW.gif")
 pawnB = PhotoImage(file="pictures/pawnB.gif")
@@ -152,56 +152,63 @@ kingB = PhotoImage(file="pictures/kingB.gif")
 
 
 ##################################
-# Affichage du Plateau de jeu
-##################################
-
-for ligne in range(8):
-    for colonne in range(8):
-
-        # Damier du plateau
-        if bg == 'true':
-            background = 'bisque2'
-            if colonne != 7:
-                bg = 'false'
-        else:
-            background = 'white'
-            if colonne != 7:
-                bg = 'true'
-
-        if Plateau[ligne][colonne] is None:
-            Button(Window, width=8, height=4, text='', bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'white':
-            Button(Window, width=60, height=60, image=pawnW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'black':
-            Button(Window, width=60, height=60, image=pawnB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'white':
-            Button(Window, width=60, height=60, image=rookW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'black':
-            Button(Window, width=60, height=60, image=rookB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'white':
-            Button(Window, width=60, height=60, image=knightW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'black':
-            Button(Window, width=60, height=60, image=knightB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'white':
-            Button(Window, width=60, height=60, image=bishopW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'black':
-            Button(Window, width=60, height=60, image=bishopB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'white':
-            Button(Window, width=60, height=60, image=queenW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'black':
-            Button(Window, width=60, height=60, image=queenB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'white':
-            Button(Window, width=60, height=60, image=kingW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-        elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'black':
-            Button(Window, width=60, height=60, image=kingB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
-
-##################################
 # Fonctions
 ##################################
+
+def Chessboard():
+
+    bg = 'false'
+
+    for ligne in range(8):
+        for colonne in range(8):
+
+            # Damier du plateau
+            if bg == 'true':
+                background = 'bisque2'
+                if colonne != 7:
+                    bg = 'false'
+            else:
+                background = 'white'
+                if colonne != 7:
+                    bg = 'true'
+
+            if Plateau[ligne][colonne] is None:
+                Button(Window, width=8, height=4, text='', bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'white':
+                Button(Window, width=60, height=60, image=pawnW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'black':
+                Button(Window, width=60, height=60, image=pawnB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'white':
+                Button(Window, width=60, height=60, image=rookW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'black':
+                Button(Window, width=60, height=60, image=rookB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'white':
+                Button(Window, width=60, height=60, image=knightW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'black':
+                Button(Window, width=60, height=60, image=knightB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'white':
+                Button(Window, width=60, height=60, image=bishopW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'black':
+                Button(Window, width=60, height=60, image=bishopB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'white':
+                Button(Window, width=60, height=60, image=queenW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'black':
+                Button(Window, width=60, height=60, image=queenB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'white':
+                Button(Window, width=60, height=60, image=kingW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+            elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'black':
+                Button(Window, width=60, height=60, image=kingB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+
+
 def Click(event):
+
     global isClick, player, PieceActivated
+
     if isClick == False:
+
         print("Click 1 OK!")
+
+        # We get the position of the mouse click
         positionX = Button.grid_info(event.widget)['row']
         positionY = Button.grid_info(event.widget)['column']
 
@@ -218,7 +225,10 @@ def Click(event):
             print('No piece at row:', positionX, 'and column:', positionY)
 
     else:
+
         print ("Click 2 OK!")
+
+        # We get the position of the mouse click
         positionX = Button.grid_info(event.widget)['row']
         positionY = Button.grid_info(event.widget)['column']
 
@@ -227,7 +237,12 @@ def Click(event):
             PieceActivated.row = positionX
             PieceActivated.column = positionY
             print(PieceActivated)
+            print(Plateau[positionX][positionY].name)
+            print(Plateau[positionX][positionY].color)
             isClick = False
+
+        # Affichage du plateau
+        Chessboard()
 
         # Player change
         if player == 'white':
@@ -235,6 +250,13 @@ def Click(event):
             return
         if player == 'black':
             player = 'white'
+
+##################################
+# Affichage du Plateau de jeu
+##################################
+
+
+Chessboard()
 
 # Left Click calls the function Click
 Window.bind("<Button-1>", Click)
