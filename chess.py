@@ -56,7 +56,7 @@ class Knight(Piece):
                     if Plateau[positionX + i][positionY + j] is None:
                         possibleMove.append(positionX + i)
                         possibleMove.append(positionY + j)
-                        j *= (-1)
+            j *= (-1)
             if 7 >= positionX + i >= 0:
                 if 7 >= positionY + j >= 0:
                     if Plateau[positionX + i][positionY + j] is None:
@@ -188,11 +188,14 @@ def Click(event):
         print(PieceActivated)
 
         if Plateau[positionX][positionY] is not None:
+            # highlight
+            Button(Window, width=60, height=60, image='knightW', bg='red', borderwidth=0).grid(row=positionX, column=positionY)
+
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
             if Plateau[positionX][positionY].color == player:
                 isClick = 'true'
                 getPossibleMove = Plateau[positionX][positionY].possibleMove(positionX, positionY)
-                print("Possible Move: ", getPossibleMove)
+                print(getPossibleMove)
         else:
             print('No piece at row:', positionX, 'and column:', positionY)
 
@@ -204,7 +207,8 @@ def Click(event):
         positionX = Button.grid_info(event.widget)['row']
         positionY = Button.grid_info(event.widget)['column']
 
-        if Plateau[positionX][positionY] is None:
+        print("Possible Move: ", getPossibleMove)
+        if pair_list(getPossibleMove, positionX, positionY) == 'true':
             # we remove old graphical position of the piece
             Plateau[PieceActivated.row][PieceActivated.column] = None
             # we move the piece object on the new Plateau position
@@ -213,9 +217,9 @@ def Click(event):
             PieceActivated.row = positionX
             PieceActivated.column = positionY
             print(PieceActivated)
-            print(Plateau[positionX][positionY].name)
-            print(Plateau[positionX][positionY].color)
-            print("Possible Move2: ", getPossibleMove)
+            print(PieceActivated.row, PieceActivated.column)
+            print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'moved to row:', positionX,'and column:', positionY)
+
             # The second click is validated, we entered in the if loop
             isClick = 'false'
             # we refresh the board
@@ -226,9 +230,18 @@ def Click(event):
                 return
             if player == 'black':
                 player = 'white'
+        else:
+            # The second click is NOT validated, we didn't enter in the if loop
+            isClick = 'false'
 
-        # The second click is NOT validated, we didn't enter in the if loop
-        isClick = 'false'
+
+def pair_list(getPossibleMoveList, X, Y):
+    moveAccepted = 'false'
+    print(len(getPossibleMoveList))
+    for i in range(0, len(getPossibleMoveList), 2):
+        if getPossibleMoveList[i] == X and getPossibleMoveList[i + 1] == Y:
+            moveAccepted = 'true'
+    return moveAccepted
 
 #############################################
 # TKINTER - MAIN PROGRAM
