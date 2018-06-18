@@ -63,7 +63,7 @@ class Knight(Piece):
                         possibleMove.append(positionX + i)
                         possibleMove.append(positionY + j)
 
-        print("Possible Move: ", possibleMove)
+        return possibleMove
 
 class Bishop(Piece):
     def __init__(self, row, column, color):
@@ -122,38 +122,10 @@ Plateau[7][4] = Queen(7, 4, 'black')
 Plateau[0][3] = King(0, 3, 'white')
 Plateau[7][3] = King(7, 3, 'black')
 
-#############################################
-# TKINTER
-#############################################
-
-Window = Tk()
-
-#############################################
-# VARIABLES
-#############################################
-
-player = 'white'
-isClick = False
-PieceActivated = None
-
-
-pawnW = PhotoImage(file="pictures/pawnW.gif")
-pawnB = PhotoImage(file="pictures/pawnB.gif")
-rookW = PhotoImage(file="pictures/rookW.gif")
-rookB = PhotoImage(file="pictures/rookB.gif")
-knightW = PhotoImage(file="pictures/knightW.gif")
-knightB = PhotoImage(file="pictures/knightB.gif")
-bishopW = PhotoImage(file="pictures/bishopW.gif")
-bishopB = PhotoImage(file="pictures/bishopB.gif")
-queenW = PhotoImage(file="pictures/queenW.gif")
-queenB = PhotoImage(file="pictures/queenB.gif")
-kingW = PhotoImage(file="pictures/kingW.gif")
-kingB = PhotoImage(file="pictures/kingB.gif")
-
-
 ##################################
 # Fonctions
 ##################################
+
 
 def Chessboard():
 
@@ -202,9 +174,9 @@ def Chessboard():
 
 def Click(event):
 
-    global isClick, player, PieceActivated
+    global isClick, player, PieceActivated, getPossibleMove
 
-    if isClick == False:
+    if isClick == 'false':
 
         print("Click 1 OK!")
 
@@ -218,43 +190,77 @@ def Click(event):
         if Plateau[positionX][positionY] is not None:
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
             if Plateau[positionX][positionY].color == player:
-                isClick = True
-                Plateau[positionX][positionY].possibleMove(positionX, positionY)
-                Plateau[positionX][positionY] = None
+                isClick = 'true'
+                getPossibleMove = Plateau[positionX][positionY].possibleMove(positionX, positionY)
+                print("Possible Move: ", getPossibleMove)
         else:
             print('No piece at row:', positionX, 'and column:', positionY)
 
     else:
 
-        print ("Click 2 OK!")
+        print("Click 2 OK!")
 
         # We get the position of the mouse click
         positionX = Button.grid_info(event.widget)['row']
         positionY = Button.grid_info(event.widget)['column']
 
         if Plateau[positionX][positionY] is None:
+            # we remove old graphical position of the piece
+            Plateau[PieceActivated.row][PieceActivated.column] = None
+            # we move the piece object on the new Plateau position
             Plateau[positionX][positionY] = PieceActivated
+            # we define the new position of the piece object
             PieceActivated.row = positionX
             PieceActivated.column = positionY
             print(PieceActivated)
             print(Plateau[positionX][positionY].name)
             print(Plateau[positionX][positionY].color)
-            isClick = False
+            print("Possible Move2: ", getPossibleMove)
+            # The second click is validated, we entered in the if loop
+            isClick = 'false'
+            # we refresh the board
+            Chessboard()
+            # Player change
+            if player == 'white':
+                player = 'black'
+                return
+            if player == 'black':
+                player = 'white'
 
-        # Affichage du plateau
-        Chessboard()
+        # The second click is NOT validated, we didn't enter in the if loop
+        isClick = 'false'
 
-        # Player change
-        if player == 'white':
-            player = 'black'
-            return
-        if player == 'black':
-            player = 'white'
+#############################################
+# TKINTER - MAIN PROGRAM
+#############################################
+
+
+Window = Tk()
+
+#############################################
+# VARIABLES
+#############################################
+
+player = 'white'
+isClick = 'false'
+PieceActivated = None
+
+pawnW = PhotoImage(file="pictures/pawnW.gif")
+pawnB = PhotoImage(file="pictures/pawnB.gif")
+rookW = PhotoImage(file="pictures/rookW.gif")
+rookB = PhotoImage(file="pictures/rookB.gif")
+knightW = PhotoImage(file="pictures/knightW.gif")
+knightB = PhotoImage(file="pictures/knightB.gif")
+bishopW = PhotoImage(file="pictures/bishopW.gif")
+bishopB = PhotoImage(file="pictures/bishopB.gif")
+queenW = PhotoImage(file="pictures/queenW.gif")
+queenB = PhotoImage(file="pictures/queenB.gif")
+kingW = PhotoImage(file="pictures/kingW.gif")
+kingB = PhotoImage(file="pictures/kingB.gif")
 
 ##################################
 # Affichage du Plateau de jeu
 ##################################
-
 
 Chessboard()
 
