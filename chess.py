@@ -147,35 +147,36 @@ def Chessboard():
             if Plateau[ligne][colonne] is None:
                 Button(Window, width=8, height=4, text='', bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=pawnW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=whitePawn, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=pawnB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=blackPawn, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=rookW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=whiteRook, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=rookB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=blackRook, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=knightW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=whiteKnight, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=knightB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=blackKnight, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=bishopW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=whiteBishop, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=bishopB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=blackBishop, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=queenW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=whiteQueen, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=queenB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=blackQueen, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=kingW, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=whiteKing, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=kingB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                Button(Window, width=60, height=60, image=blackKing, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
 
 
 def rightClick(event):
     global isClick
     isClick = 'false'
-    # remove highlight of the activated piece
+    # remove highlight of the activated piece by refreshing the screen
+    Chessboard()
 
 
 def Click(event):
@@ -195,7 +196,10 @@ def Click(event):
 
         if Plateau[positionX][positionY] is not None:
             # highlight
-            Button(Window, width=60, height=60, image='knightW', bg='red', borderwidth=0).grid(row=positionX, column=positionY)
+            print(PieceActivated.color+PieceActivated.name)
+            PieceActivatedImage =''.join([PieceActivated.color, PieceActivated.name])
+            print(PieceActivatedImage)
+            Button(Window, width=60, height=60, image=whiteKnight, bg='bisque3', borderwidth=0).grid(row=positionX, column=positionY)
 
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
             if Plateau[positionX][positionY].color == player:
@@ -264,18 +268,18 @@ player = 'white'
 isClick = 'false'
 PieceActivated = None
 
-pawnW = PhotoImage(file="pictures/pawnW.gif")
-pawnB = PhotoImage(file="pictures/pawnB.gif")
-rookW = PhotoImage(file="pictures/rookW.gif")
-rookB = PhotoImage(file="pictures/rookB.gif")
-knightW = PhotoImage(file="pictures/knightW.gif")
-knightB = PhotoImage(file="pictures/knightB.gif")
-bishopW = PhotoImage(file="pictures/bishopW.gif")
-bishopB = PhotoImage(file="pictures/bishopB.gif")
-queenW = PhotoImage(file="pictures/queenW.gif")
-queenB = PhotoImage(file="pictures/queenB.gif")
-kingW = PhotoImage(file="pictures/kingW.gif")
-kingB = PhotoImage(file="pictures/kingB.gif")
+whitePawn = PhotoImage(file="pictures/pawnW.gif")
+blackPawn = PhotoImage(file="pictures/pawnB.gif")
+whiteRook = PhotoImage(file="pictures/rookW.gif")
+blackRook = PhotoImage(file="pictures/rookB.gif")
+whiteKnight = PhotoImage(file="pictures/knightW.gif")
+blackKnight = PhotoImage(file="pictures/knightB.gif")
+whiteBishop = PhotoImage(file="pictures/bishopW.gif")
+blackBishop = PhotoImage(file="pictures/bishopB.gif")
+whiteQueen = PhotoImage(file="pictures/queenW.gif")
+blackQueen = PhotoImage(file="pictures/queenB.gif")
+whiteKing = PhotoImage(file="pictures/kingW.gif")
+blackKing = PhotoImage(file="pictures/kingB.gif")
 
 ##################################
 # Affichage du Plateau de jeu
