@@ -172,6 +172,12 @@ def Chessboard():
                 Button(Window, width=60, height=60, image=kingB, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
 
 
+def rightClick(event):
+    global isClick
+    isClick = 'false'
+    # remove highlight of the activated piece
+
+
 def Click(event):
 
     global isClick, player, PieceActivated, getPossibleMove
@@ -279,4 +285,7 @@ Chessboard()
 
 # Left Click calls the function Click
 Window.bind("<Button-1>", Click)
+# Right click cancel the first click
+Window.bind("<Button-3>", rightClick)
+# Loop
 Window.mainloop()
