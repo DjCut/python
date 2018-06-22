@@ -30,11 +30,56 @@ class Pawn(Piece):
         Piece.__init__(self, row, column, color)
         self.name = 'Pawn'
 
+    def possibleMove(self, positionX, positionY, color):
+        possibleMove = []
+        if color == 'black':
+            if positionX == 6 and Plateau[positionX - 1][positionY] is None:
+                possibleMove.append(positionX - 2)
+                possibleMove.append(positionY)
+            if Plateau[positionX - 1][positionY] is None:
+                possibleMove.append(positionX - 1)
+                possibleMove.append(positionY)
+            if 7 >= positionY - 1 >= 0:
+                if Plateau[positionX - 1][positionY - 1] is not None:
+                    if Plateau[positionX - 1][positionY - 1].color != color:
+                        possibleMove.append(positionX - 1)
+                        possibleMove.append(positionY - 1)
+            if 7 >= positionY + 1 >= 0:
+                if Plateau[positionX - 1][positionY + 1] is not None:
+                    if Plateau[positionX - 1][positionY + 1].color != color:
+                        possibleMove.append(positionX - 1)
+                        possibleMove.append(positionY + 1)
+        else:
+            if positionX == 1 and Plateau[positionX + 1][positionY] is None:
+                possibleMove.append(positionX + 2)
+                possibleMove.append(positionY)
+            if Plateau[positionX + 1][positionY] is None:
+                possibleMove.append(positionX + 1)
+                possibleMove.append(positionY)
+            if 7 >= positionY - 1 >= 0:
+                if Plateau[positionX + 1][positionY - 1] is not None:
+                    if Plateau[positionX + 1][positionY - 1].color != color:
+                        possibleMove.append(positionX + 1)
+                        possibleMove.append(positionY - 1)
+            if 7 >= positionY + 1 >= 0:
+                if Plateau[positionX + 1][positionY + 1] is not None:
+                    if Plateau[positionX + 1][positionY + 1].color != color:
+                        possibleMove.append(positionX + 1)
+                        possibleMove.append(positionY + 1)
+
+        return possibleMove
+
 
 class Rook(Piece):
     def __init__(self, row, column, color):
         Piece.__init__(self, row, column, color)
         self.name = 'Rook'
+
+    def possibleMove(self, positionX, positionY, color):
+        possibleMove = []
+
+
+        return possibleMove
 
 
 class Knight(Piece):
@@ -42,7 +87,7 @@ class Knight(Piece):
         Piece.__init__(self, row, column, color)
         self.name = 'Knight'
 
-    def possibleMove(self, positionX, positionY):
+    def possibleMove(self, positionX, positionY, color):
         possibleMove = []
         j = 0
         for i in range(-2, 3):
@@ -198,13 +243,13 @@ def Click(event):
             # highlight
             print(PieceActivated.color+PieceActivated.name)
             PieceActivatedImage =''.join([PieceActivated.color, PieceActivated.name])
-            print(PieceActivatedImage)
-            Button(Window, width=60, height=60, image=whiteKnight, bg='bisque3', borderwidth=0).grid(row=positionX, column=positionY)
+
+            #Button(Window, width=60, height=60, image=''.join([PieceActivated.color, PieceActivated.name]), bg='bisque3', borderwidth=0).grid(row=positionX, column=positionY)
 
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
             if Plateau[positionX][positionY].color == player:
                 isClick = 'true'
-                getPossibleMove = Plateau[positionX][positionY].possibleMove(positionX, positionY)
+                getPossibleMove = Plateau[positionX][positionY].possibleMove(positionX, positionY, Plateau[positionX][positionY].color)
                 print(getPossibleMove)
         else:
             print('No piece at row:', positionX, 'and column:', positionY)
