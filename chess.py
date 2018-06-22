@@ -212,6 +212,24 @@ class King(Piece):
         Piece.__init__(self, row, column, color)
         self.name = 'King'
 
+    def possibleMove(self, positionX, positionY, color):
+        possibleMove = []
+
+        for i in range(-1, 2, 2):
+            X = positionX + i
+            for j in range(-1, 2):
+                Y = positionY + j
+                if 7 >= X >= 0 and 7 >= Y >= 0:
+                    if Plateau[X][Y] is not None:
+                        if Plateau[X][Y].color != color:
+                            possibleMove.append(X)
+                            possibleMove.append(Y)
+                    else:
+                        possibleMove.append(X)
+                        possibleMove.append(Y)
+
+        return possibleMove
+
 
 #############################################
 # OBJECTS
