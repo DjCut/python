@@ -32,6 +32,7 @@ class Pawn(Piece):
 
     def possibleMove(self, positionX, positionY, color):
         possibleMove = []
+
         if color == 'black':
             if positionX == 6 and Plateau[positionX - 1][positionY] is None:
                 possibleMove.append(positionX - 2)
@@ -77,6 +78,7 @@ class Rook(Piece):
 
     def possibleMove(self, positionX, positionY, color):
         possibleMove = []
+
         # Check UP and DOWN position
         for i in range(-1, 2, 2):
             X = positionX + i
@@ -123,6 +125,7 @@ class Knight(Piece):
 
     def possibleMove(self, positionX, positionY, color):
         possibleMove = []
+
         j = 0
         for i in range(-2, 3):
             if i == -2: j = 1
@@ -152,10 +155,35 @@ class Knight(Piece):
 
         return possibleMove
 
+
 class Bishop(Piece):
     def __init__(self, row, column, color):
         Piece.__init__(self, row, column, color)
         self.name = 'Bishop'
+
+    def possibleMove(self, positionX, positionY, color):
+        possibleMove = []
+
+        for h in range(-1, 2, 2):
+            for i in range(-1, 2, 2):
+                X = positionX + i
+                Y = positionY + h
+                if 7 >= X >= 0 and 7 >= Y >= 0:
+                    if Plateau[X][Y] is not None:
+                        if Plateau[X][Y].color != color:
+                            possibleMove.append(X)
+                            possibleMove.append(Y)
+                while (7 >= X >= 0) and 7 >= Y >= 0 and (Plateau[X][Y]) is None:
+                    possibleMove.append(X)
+                    possibleMove.append(Y)
+                    X = X + i
+                    Y = Y + h
+                    if 7 >= X >= 0 and 7 >= Y >= 0:
+                        if Plateau[X][Y] is not None:
+                            if Plateau[X][Y].color != color:
+                                possibleMove.append(X)
+                                possibleMove.append(Y)
+        return possibleMove
 
 
 class Queen(Piece):
@@ -163,6 +191,21 @@ class Queen(Piece):
         Piece.__init__(self, row, column, color)
         self.name = 'Queen'
 
+    def possibleMove(self, positionX, positionY, color):
+
+        # Get the Rook movement
+        if color == 'white':
+            possibleMove = RookWhite.possibleMove(positionX, positionY, color)
+        else:
+            possibleMove = RookBlack.possibleMove(positionX, positionY, color)
+
+        # Get the Bishop movement
+        if color == 'white':
+            possibleMove = possibleMove + BishopWhite.possibleMove(positionX, positionY, color)
+        else:
+            possibleMove = possibleMove + BishopBlack.possibleMove(positionX, positionY, color)
+
+        return possibleMove
 
 class King(Piece):
     def __init__(self, row, column, color):
@@ -174,6 +217,11 @@ class King(Piece):
 # OBJECTS
 #############################################
 
+# Objects used for the Queen movement
+RookWhite = Rook(0, 0, 'white')
+RookBlack = Rook(0, 0, 'black')
+BishopWhite = Bishop(0, 0, 'white')
+BishopBlack = Bishop(0, 0, 'black')
 
 # initialize white pawns
 for i in range(0, 8):
