@@ -77,7 +77,41 @@ class Rook(Piece):
 
     def possibleMove(self, positionX, positionY, color):
         possibleMove = []
+        # Check UP and DOWN position
+        for i in range(-1, 2, 2):
+            X = positionX + i
+            if 7 >= X >= 0:
+                if Plateau[X][positionY] is not None:
+                    if Plateau[X][positionY].color != color:
+                        possibleMove.append(X)
+                        possibleMove.append(positionY)
+            while (7 >= X >= 0) and (Plateau[X][positionY]) is None:
+                possibleMove.append(X)
+                possibleMove.append(positionY)
+                X = X + i
+                if 7 >= X >= 0:
+                    if Plateau[X][positionY] is not None:
+                        if Plateau[X][positionY].color != color:
+                            possibleMove.append(X)
+                            possibleMove.append(positionY)
 
+        # Check LEFT and RIGHT position
+        for i in range(-1, 2, 2):
+            Y = positionY + i
+            if 7 >= Y >= 0:
+                if Plateau[positionX][Y] is not None:
+                    if Plateau[positionX][Y].color != color:
+                        possibleMove.append(positionX)
+                        possibleMove.append(Y)
+            while (7 >= Y >= 0) and (Plateau[positionX][Y]) is None:
+                possibleMove.append(positionX)
+                possibleMove.append(Y)
+                Y = Y + i
+                if 7 >= Y >= 0:
+                    if Plateau[positionX][Y] is not None:
+                        if Plateau[positionX][Y].color != color:
+                            possibleMove.append(positionX)
+                            possibleMove.append(Y)
 
         return possibleMove
 
@@ -101,12 +135,20 @@ class Knight(Piece):
                     if Plateau[positionX + i][positionY + j] is None:
                         possibleMove.append(positionX + i)
                         possibleMove.append(positionY + j)
+                    if Plateau[positionX + i][positionY + j] is not None:
+                        if Plateau[positionX + i][positionY + j].color != color:
+                            possibleMove.append(positionX + i)
+                            possibleMove.append(positionY + j)
             j *= (-1)
             if 7 >= positionX + i >= 0:
                 if 7 >= positionY + j >= 0:
                     if Plateau[positionX + i][positionY + j] is None:
                         possibleMove.append(positionX + i)
                         possibleMove.append(positionY + j)
+                    if Plateau[positionX + i][positionY + j] is not None:
+                        if Plateau[positionX + i][positionY + j].color != color:
+                            possibleMove.append(positionX + i)
+                            possibleMove.append(positionY + j)
 
         return possibleMove
 
