@@ -241,6 +241,14 @@ RookBlack = Rook(0, 0, 'black')
 BishopWhite = Bishop(0, 0, 'white')
 BishopBlack = Bishop(0, 0, 'black')
 
+# Objects used for the King checkmate function
+RookWhite = Rook(0, 0, 'white')
+BishopWhite = Bishop(0, 0, 'white')
+QueenWhite = Queen(0, 0, 'white')
+KingWhite = King(0, 0, 'white')
+KnightWhite = Knight(0, 0, 'white')
+PawnWhite = Pawn(0, 0, 'white')
+
 # initialize white pawns
 for i in range(0, 8):
     Plateau[1][i] = Pawn(1, i, 'white')
@@ -393,6 +401,10 @@ def Click(event):
                 return
             if player == 'black':
                 player = 'white'
+
+            # Is the opponent's King CheckMated?
+
+            check(player)
         else:
             # The second click is NOT validated, we didn't enter in the if loop
             isClick = 'false'
@@ -405,6 +417,9 @@ def pair_list(getPossibleMoveList, X, Y):
         if getPossibleMoveList[i] == X and getPossibleMoveList[i + 1] == Y:
             moveAccepted = 'true'
     return moveAccepted
+
+def check():
+    scan = RookWhite.possibleMove(positionX, positionY, color)
 
 #############################################
 # TKINTER - MAIN PROGRAM
