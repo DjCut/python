@@ -78,6 +78,7 @@ class Rook(Piece):
 
     def possibleMove(self, positionX, positionY, color):
         possibleMove = []
+        rook = 'false'
 
         # Check UP and DOWN position
         for i in range(-1, 2, 2):
@@ -87,6 +88,8 @@ class Rook(Piece):
                     if Plateau[X][positionY].color != color:
                         possibleMove.append(X)
                         possibleMove.append(positionY)
+                        if Plateau[X][positionY].name == 'Rook':
+                            rook = 'true'
             while (7 >= X >= 0) and (Plateau[X][positionY]) is None:
                 possibleMove.append(X)
                 possibleMove.append(positionY)
@@ -96,6 +99,8 @@ class Rook(Piece):
                         if Plateau[X][positionY].color != color:
                             possibleMove.append(X)
                             possibleMove.append(positionY)
+                            if Plateau[X][positionY].name == 'Rook':
+                                rook = 'true'
 
         # Check LEFT and RIGHT position
         for i in range(-1, 2, 2):
@@ -105,6 +110,8 @@ class Rook(Piece):
                     if Plateau[positionX][Y].color != color:
                         possibleMove.append(positionX)
                         possibleMove.append(Y)
+                        if Plateau[X][positionY].name == 'Rook':
+                            rook = 'true'
             while (7 >= Y >= 0) and (Plateau[positionX][Y]) is None:
                 possibleMove.append(positionX)
                 possibleMove.append(Y)
@@ -114,8 +121,10 @@ class Rook(Piece):
                         if Plateau[positionX][Y].color != color:
                             possibleMove.append(positionX)
                             possibleMove.append(Y)
+                            if Plateau[X][positionY].name == 'Rook':
+                                rook = 'true'
 
-        return possibleMove
+        return possibleMove, rook
 
 
 class Knight(Piece):
@@ -342,7 +351,7 @@ def rightClick(event):
 
 def Click(event):
 
-    global isClick, player, PieceActivated, getPossibleMove
+    global isClick, player, PieceActivated, getPossibleMove, checkTest
 
     if isClick == 'false':
 
@@ -378,8 +387,11 @@ def Click(event):
         positionX = Button.grid_info(event.widget)['row']
         positionY = Button.grid_info(event.widget)['column']
 
+        # We verify that the player move does not put his own king in check state
+        check()
+
         print("Possible Move: ", getPossibleMove)
-        if pair_list(getPossibleMove, positionX, positionY) == 'true':
+        if pair_list(getPossibleMove, positionX, positionY) == 'true' and checkTest == 'false':
             # we remove old graphical position of the piece
             Plateau[PieceActivated.row][PieceActivated.column] = None
             # we move the piece object on the new Plateau position
@@ -403,11 +415,12 @@ def Click(event):
                 player = 'white'
 
             # Is the opponent's King CheckMated?
+            check()
 
-            check(player)
         else:
             # The second click is NOT validated, we didn't enter in the if loop
             isClick = 'false'
+            checkTest = 'false'
 
 
 def pair_list(getPossibleMoveList, X, Y):
@@ -418,8 +431,18 @@ def pair_list(getPossibleMoveList, X, Y):
             moveAccepted = 'true'
     return moveAccepted
 
+
 def check():
-    scan = RookWhite.possibleMove(positionX, positionY, color)
+    global checkTest, player
+    for ligne in range(8):
+        for colonne in range(8):
+            if Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == player:
+                KingPositionX = ligne
+                KingPositionY = colonne
+                print(player)
+                Rook.possibleMove(KingPositionX, KingPositionY, color=player)
+                if rook == 'true':
+                    checkTest = 'true'
 
 #############################################
 # TKINTER - MAIN PROGRAM
