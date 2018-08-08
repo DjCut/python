@@ -78,7 +78,6 @@ class Rook(Piece):
 
     def possibleMove(self, positionX, positionY, color):
         possibleMove = []
-        rook = 'false'
 
         # Check UP and DOWN position
         for i in range(-1, 2, 2):
@@ -100,7 +99,8 @@ class Rook(Piece):
                             possibleMove.append(X)
                             possibleMove.append(positionY)
                             if Plateau[X][positionY].name == 'Rook':
-                                rook = 'true'
+                                possibleMove.append(100)
+                                possibleMove.append(100)
 
         # Check LEFT and RIGHT position
         for i in range(-1, 2, 2):
@@ -122,9 +122,10 @@ class Rook(Piece):
                             possibleMove.append(positionX)
                             possibleMove.append(Y)
                             if Plateau[X][positionY].name == 'Rook':
-                                rook = 'true'
+                                possibleMove.append(100)
+                                possibleMove.append(100)
 
-        return possibleMove, rook
+        return possibleMove
 
 
 class Knight(Piece):
@@ -388,7 +389,7 @@ def Click(event):
         positionY = Button.grid_info(event.widget)['column']
 
         # We verify that the player move does not put his own king in check state
-        check()
+        #check()
 
         print("Possible Move: ", getPossibleMove)
         if pair_list(getPossibleMove, positionX, positionY) == 'true' and checkTest == 'false':
@@ -436,13 +437,15 @@ def check():
     global checkTest, player
     for ligne in range(8):
         for colonne in range(8):
-            if Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == player:
-                KingPositionX = ligne
-                KingPositionY = colonne
-                print(player)
-                Rook.possibleMove(KingPositionX, KingPositionY, color=player)
-                if rook == 'true':
-                    checkTest = 'true'
+            if Plateau[ligne][colonne] is not None:
+                if Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == player:
+                    rook = RookWhite.possibleMove(ligne, colonne, player)
+                    for i in range(0, len(rook), 2):
+                        if rook[i] == 100:
+                            checkTest = 'true'
+                            print('CHECKED BY A ROOK')
+                            break
+
 
 #############################################
 # TKINTER - MAIN PROGRAM
@@ -458,6 +461,7 @@ Window = Tk()
 player = 'white'
 isClick = 'false'
 PieceActivated = None
+checkTest = 'false'
 
 whitePawn = PhotoImage(file="pictures/pawnW.gif")
 blackPawn = PhotoImage(file="pictures/pawnB.gif")
