@@ -88,7 +88,8 @@ class Rook(Piece):
                         possibleMove.append(X)
                         possibleMove.append(positionY)
                         if Plateau[X][positionY].name == 'Rook':
-                            rook = 'true'
+                            possibleMove.append(100)
+                            possibleMove.append(100)
             while (7 >= X >= 0) and (Plateau[X][positionY]) is None:
                 possibleMove.append(X)
                 possibleMove.append(positionY)
@@ -110,8 +111,9 @@ class Rook(Piece):
                     if Plateau[positionX][Y].color != color:
                         possibleMove.append(positionX)
                         possibleMove.append(Y)
-                        if Plateau[X][positionY].name == 'Rook':
-                            rook = 'true'
+                        if Plateau[positionX][Y].name == 'Rook':
+                            possibleMove.append(100)
+                            possibleMove.append(100)
             while (7 >= Y >= 0) and (Plateau[positionX][Y]) is None:
                 possibleMove.append(positionX)
                 possibleMove.append(Y)
@@ -121,7 +123,7 @@ class Rook(Piece):
                         if Plateau[positionX][Y].color != color:
                             possibleMove.append(positionX)
                             possibleMove.append(Y)
-                            if Plateau[X][positionY].name == 'Rook':
+                            if Plateau[positionX][Y].name == 'Rook':
                                 possibleMove.append(100)
                                 possibleMove.append(100)
 
@@ -183,6 +185,9 @@ class Bishop(Piece):
                         if Plateau[X][Y].color != color:
                             possibleMove.append(X)
                             possibleMove.append(Y)
+                            if Plateau[X][Y].name == 'Bishop':
+                                possibleMove.append(100)
+                                possibleMove.append(100)
                 while (7 >= X >= 0) and 7 >= Y >= 0 and (Plateau[X][Y]) is None:
                     possibleMove.append(X)
                     possibleMove.append(Y)
@@ -193,6 +198,9 @@ class Bishop(Piece):
                             if Plateau[X][Y].color != color:
                                 possibleMove.append(X)
                                 possibleMove.append(Y)
+                                if Plateau[X][Y].name == 'Bishop':
+                                    possibleMove.append(100)
+                                    possibleMove.append(100)
         return possibleMove
 
 
@@ -225,7 +233,7 @@ class King(Piece):
     def possibleMove(self, positionX, positionY, color):
         possibleMove = []
 
-        for i in range(-1, 2, 2):
+        for i in range(-1, 2):
             X = positionX + i
             for j in range(-1, 2):
                 Y = positionY + j
@@ -246,18 +254,20 @@ class King(Piece):
 #############################################
 
 # Objects used for the Queen movement
-RookWhite = Rook(0, 0, 'white')
-RookBlack = Rook(0, 0, 'black')
-BishopWhite = Bishop(0, 0, 'white')
-BishopBlack = Bishop(0, 0, 'black')
+RookWhite = Rook(10, 10, 'white')
+RookBlack = Rook(10, 10, 'black')
+BishopWhite = Bishop(10, 10, 'white')
+BishopBlack = Bishop(10, 10, 'black')
 
 # Objects used for the King checkmate function
-RookWhite = Rook(0, 0, 'white')
-BishopWhite = Bishop(0, 0, 'white')
-QueenWhite = Queen(0, 0, 'white')
-KingWhite = King(0, 0, 'white')
-KnightWhite = Knight(0, 0, 'white')
-PawnWhite = Pawn(0, 0, 'white')
+TemporaryObject = Pawn(10, 10, 'blue')
+RookObject = Rook(10, 10, 'white')
+BishopObject = Bishop(10, 10, 'white')
+BishopWhite = Bishop(10, 10, 'white')
+QueenWhite = Queen(10, 10, 'white')
+KingWhite = King(10, 10, 'white')
+KnightWhite = Knight(10, 10, 'white')
+PawnWhite = Pawn(10, 10, 'white')
 
 # initialize white pawns
 for i in range(0, 8):
@@ -357,6 +367,7 @@ def Click(event):
     if isClick == 'false':
 
         print("Click 1 OK!")
+        checkTest = 'false'
 
         # We get the position of the mouse click
         positionX = Button.grid_info(event.widget)['row']
@@ -388,8 +399,28 @@ def Click(event):
         positionX = Button.grid_info(event.widget)['row']
         positionY = Button.grid_info(event.widget)['column']
 
-        # We verify that the player move does not put his own king in check state
-        #check()
+        # We save the old position of the piece activated
+        oldPositionX = PieceActivated.row
+        oldPositionY = PieceActivated.column
+
+        # we temporary remove old graphical position of the piece
+        Plateau[PieceActivated.row][PieceActivated.column] = None
+        # we temporary move the piece object on the new Plateau position
+        Plateau[positionX][positionY] = PieceActivated
+        # we temporary define the new position of the piece object
+        PieceActivated.row = positionX
+        PieceActivated.column = positionY
+
+        # Is my King checked if I move like this?
+        check()
+
+        # we remove the temporary graphical position of the piece
+        Plateau[positionX][positionY] = None
+        # we move the piece object on the old Plateau position
+        Plateau[oldPositionX][oldPositionY] = PieceActivated
+        # we define the old position of the piece object
+        PieceActivated.row = oldPositionX
+        PieceActivated.column = oldPositionY
 
         print("Possible Move: ", getPossibleMove)
         if pair_list(getPossibleMove, positionX, positionY) == 'true' and checkTest == 'false':
@@ -416,12 +447,11 @@ def Click(event):
                 player = 'white'
 
             # Is the opponent's King CheckMated?
-            check()
+            #check()
 
         else:
             # The second click is NOT validated, we didn't enter in the if loop
             isClick = 'false'
-            checkTest = 'false'
 
 
 def pair_list(getPossibleMoveList, X, Y):
@@ -439,11 +469,19 @@ def check():
         for colonne in range(8):
             if Plateau[ligne][colonne] is not None:
                 if Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == player:
-                    rook = RookWhite.possibleMove(ligne, colonne, player)
+                    rook = RookObject.possibleMove(ligne, colonne, player)
+                    print('rookCheckMove:', rook)
                     for i in range(0, len(rook), 2):
                         if rook[i] == 100:
                             checkTest = 'true'
                             print('CHECKED BY A ROOK')
+                            break
+                    bishop = BishopObject.possibleMove(ligne, colonne, player)
+                    print('bishopCheckMove:', bishop)
+                    for i in range(0, len(bishop), 2):
+                        if bishop[i] == 100:
+                            checkTest = 'true'
+                            print('CHECKED BY A BISHOP')
                             break
 
 
