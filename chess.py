@@ -45,11 +45,17 @@ class Pawn(Piece):
                     if Plateau[positionX - 1][positionY - 1].color != color:
                         possibleMove.append(positionX - 1)
                         possibleMove.append(positionY - 1)
+                        if Plateau[positionX - 1][positionY - 1].name == 'Pawn':
+                            possibleMove.append(100)
+                            possibleMove.append(100)
             if 7 >= positionY + 1 >= 0:
                 if Plateau[positionX - 1][positionY + 1] is not None:
                     if Plateau[positionX - 1][positionY + 1].color != color:
                         possibleMove.append(positionX - 1)
                         possibleMove.append(positionY + 1)
+                        if Plateau[positionX - 1][positionY + 1].name == 'Pawn':
+                            possibleMove.append(100)
+                            possibleMove.append(100)
         else:
             if positionX == 1 and Plateau[positionX + 1][positionY] is None:
                 possibleMove.append(positionX + 2)
@@ -62,11 +68,17 @@ class Pawn(Piece):
                     if Plateau[positionX + 1][positionY - 1].color != color:
                         possibleMove.append(positionX + 1)
                         possibleMove.append(positionY - 1)
+                        if Plateau[positionX + 1][positionY - 1].name == 'Pawn':
+                            possibleMove.append(100)
+                            possibleMove.append(100)
             if 7 >= positionY + 1 >= 0:
                 if Plateau[positionX + 1][positionY + 1] is not None:
                     if Plateau[positionX + 1][positionY + 1].color != color:
                         possibleMove.append(positionX + 1)
                         possibleMove.append(positionY + 1)
+                        if Plateau[positionX + 1][positionY + 1].name == 'Pawn':
+                            possibleMove.append(100)
+                            possibleMove.append(100)
 
         return possibleMove
 
@@ -87,7 +99,7 @@ class Rook(Piece):
                     if Plateau[X][positionY].color != color:
                         possibleMove.append(X)
                         possibleMove.append(positionY)
-                        if Plateau[X][positionY].name == 'Rook':
+                        if Plateau[X][positionY].name == 'Rook' or Plateau[X][positionY].name == 'Queen':
                             possibleMove.append(100)
                             possibleMove.append(100)
             while (7 >= X >= 0) and (Plateau[X][positionY]) is None:
@@ -99,7 +111,7 @@ class Rook(Piece):
                         if Plateau[X][positionY].color != color:
                             possibleMove.append(X)
                             possibleMove.append(positionY)
-                            if Plateau[X][positionY].name == 'Rook':
+                            if Plateau[X][positionY].name == 'Rook' or Plateau[X][positionY].name == 'Queen':
                                 possibleMove.append(100)
                                 possibleMove.append(100)
 
@@ -111,7 +123,7 @@ class Rook(Piece):
                     if Plateau[positionX][Y].color != color:
                         possibleMove.append(positionX)
                         possibleMove.append(Y)
-                        if Plateau[positionX][Y].name == 'Rook':
+                        if Plateau[positionX][Y].name == 'Rook' or Plateau[positionX][Y].name == 'Queen':
                             possibleMove.append(100)
                             possibleMove.append(100)
             while (7 >= Y >= 0) and (Plateau[positionX][Y]) is None:
@@ -123,7 +135,7 @@ class Rook(Piece):
                         if Plateau[positionX][Y].color != color:
                             possibleMove.append(positionX)
                             possibleMove.append(Y)
-                            if Plateau[positionX][Y].name == 'Rook':
+                            if Plateau[positionX][Y].name == 'Rook' or Plateau[positionX][Y].name == 'Queen':
                                 possibleMove.append(100)
                                 possibleMove.append(100)
 
@@ -154,6 +166,9 @@ class Knight(Piece):
                         if Plateau[positionX + i][positionY + j].color != color:
                             possibleMove.append(positionX + i)
                             possibleMove.append(positionY + j)
+                            if Plateau[positionX + i][positionY + j].name == 'Knight':
+                                possibleMove.append(100)
+                                possibleMove.append(100)
             j *= (-1)
             if 7 >= positionX + i >= 0:
                 if 7 >= positionY + j >= 0:
@@ -164,6 +179,9 @@ class Knight(Piece):
                         if Plateau[positionX + i][positionY + j].color != color:
                             possibleMove.append(positionX + i)
                             possibleMove.append(positionY + j)
+                            if Plateau[positionX + i][positionY + j].name == 'Knight':
+                                possibleMove.append(100)
+                                possibleMove.append(100)
 
         return possibleMove
 
@@ -185,7 +203,7 @@ class Bishop(Piece):
                         if Plateau[X][Y].color != color:
                             possibleMove.append(X)
                             possibleMove.append(Y)
-                            if Plateau[X][Y].name == 'Bishop':
+                            if Plateau[X][Y].name == 'Bishop' or Plateau[X][Y].name == 'Queen':
                                 possibleMove.append(100)
                                 possibleMove.append(100)
                 while (7 >= X >= 0) and 7 >= Y >= 0 and (Plateau[X][Y]) is None:
@@ -198,7 +216,7 @@ class Bishop(Piece):
                             if Plateau[X][Y].color != color:
                                 possibleMove.append(X)
                                 possibleMove.append(Y)
-                                if Plateau[X][Y].name == 'Bishop':
+                                if Plateau[X][Y].name == 'Bishop' or Plateau[X][Y].name == 'Queen':
                                     possibleMove.append(100)
                                     possibleMove.append(100)
         return possibleMove
@@ -242,6 +260,9 @@ class King(Piece):
                         if Plateau[X][Y].color != color:
                             possibleMove.append(X)
                             possibleMove.append(Y)
+                            if Plateau[X][Y].name == 'King':
+                                possibleMove.append(100)
+                                possibleMove.append(100)
                     else:
                         possibleMove.append(X)
                         possibleMove.append(Y)
@@ -259,15 +280,13 @@ RookBlack = Rook(10, 10, 'black')
 BishopWhite = Bishop(10, 10, 'white')
 BishopBlack = Bishop(10, 10, 'black')
 
-# Objects used for the King checkmate function
-TemporaryObject = Pawn(10, 10, 'blue')
-RookObject = Rook(10, 10, 'white')
-BishopObject = Bishop(10, 10, 'white')
-BishopWhite = Bishop(10, 10, 'white')
-QueenWhite = Queen(10, 10, 'white')
-KingWhite = King(10, 10, 'white')
-KnightWhite = Knight(10, 10, 'white')
-PawnWhite = Pawn(10, 10, 'white')
+# Objects used for the check function
+RookObject = Rook(10, 10, 'red')
+BishopObject = Bishop(10, 10, 'red')
+PawnObject = Pawn(10, 10, 'red')
+KnightObject = Knight(10, 10, 'red')
+QueenObject = Queen(10, 10, 'red')
+KingObject = King(10, 10, 'red')
 
 # initialize white pawns
 for i in range(0, 8):
@@ -406,6 +425,7 @@ def Click(event):
         # we temporary remove old graphical position of the piece
         Plateau[PieceActivated.row][PieceActivated.column] = None
         # we temporary move the piece object on the new Plateau position
+        originalPiece = Plateau[positionX][positionY]
         Plateau[positionX][positionY] = PieceActivated
         # we temporary define the new position of the piece object
         PieceActivated.row = positionX
@@ -415,7 +435,7 @@ def Click(event):
         check()
 
         # we remove the temporary graphical position of the piece
-        Plateau[positionX][positionY] = None
+        Plateau[positionX][positionY] = originalPiece
         # we move the piece object on the old Plateau position
         Plateau[oldPositionX][oldPositionY] = PieceActivated
         # we define the old position of the piece object
@@ -474,16 +494,43 @@ def check():
                     for i in range(0, len(rook), 2):
                         if rook[i] == 100:
                             checkTest = 'true'
-                            print('CHECKED BY A ROOK')
+                            print('CHECKED BY A ROOK (or a Queen)')
                             break
                     bishop = BishopObject.possibleMove(ligne, colonne, player)
                     print('bishopCheckMove:', bishop)
                     for i in range(0, len(bishop), 2):
                         if bishop[i] == 100:
                             checkTest = 'true'
-                            print('CHECKED BY A BISHOP')
+                            print('CHECKED BY A BISHOP (or a Queen)')
                             break
-
+                    pawn = PawnObject.possibleMove(ligne, colonne, player)
+                    print('pawnCheckMove:', pawn)
+                    for i in range(0, len(pawn), 2):
+                        if pawn[i] == 100:
+                            checkTest = 'true'
+                            print('CHECKED BY A PAWN')
+                            break
+                    knight = KnightObject.possibleMove(ligne, colonne, player)
+                    print('knightCheckMove:', knight)
+                    for i in range(0, len(knight), 2):
+                        if knight[i] == 100:
+                            checkTest = 'true'
+                            print('CHECKED BY A KNIGHT')
+                            break
+                    queen = QueenObject.possibleMove(ligne, colonne, player)
+                    print('queenCheckMove:', queen)
+                    for i in range(0, len(queen), 2):
+                        if queen[i] == 100:
+                            checkTest = 'true'
+                            print('CHECKED BY A QUEEN (or a Bishop, or a Rook)')
+                            break
+                    king = KingObject.possibleMove(ligne, colonne, player)
+                    print('kingCheckMove:', king)
+                    for i in range(0, len(king), 2):
+                        if king[i] == 100:
+                            checkTest = 'true'
+                            print('CHECKED BY A KING')
+                            break
 
 #############################################
 # TKINTER - MAIN PROGRAM
