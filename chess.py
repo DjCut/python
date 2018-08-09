@@ -397,10 +397,8 @@ def Click(event):
 
         if Plateau[positionX][positionY] is not None:
             # highlight
-            print(PieceActivated.color+PieceActivated.name)
-            PieceActivatedImage =''.join([PieceActivated.color, PieceActivated.name])
-
-            #Button(Window, width=60, height=60, image=''.join([PieceActivated.color, PieceActivated.name]), bg='bisque3', borderwidth=0).grid(row=positionX, column=positionY)
+            Chessboard()
+            Button(Window, width=60, height=60, image=eval(''.join([PieceActivated.color, PieceActivated.name])), bg='gold', borderwidth=0).grid(row=positionX, column=positionY)
 
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
             if Plateau[positionX][positionY].color == player:
