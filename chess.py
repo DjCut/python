@@ -387,6 +387,7 @@ def Click(event):
 
         print("Click 1 OK!")
         checkTest = 'false'
+        Chessboard()
 
         # We get the position of the mouse click
         positionX = Button.grid_info(event.widget)['row']
@@ -397,7 +398,6 @@ def Click(event):
 
         if Plateau[positionX][positionY] is not None:
             # highlight
-            Chessboard()
             Button(Window, width=60, height=60, image=eval(''.join([PieceActivated.color, PieceActivated.name])), bg='gold', borderwidth=0).grid(row=positionX, column=positionY)
 
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
@@ -460,12 +460,15 @@ def Click(event):
             # Player change
             if player == 'white':
                 player = 'black'
+                # Is the opponent's King CheckMated?
+                checkMate()
                 return
             if player == 'black':
                 player = 'white'
+                # Is the opponent's King CheckMated?
+                checkMate()
 
-            # Is the opponent's King CheckMated?
-            #check()
+
 
         else:
             # The second click is NOT validated, we didn't enter in the if loop
@@ -483,6 +486,8 @@ def pair_list(getPossibleMoveList, X, Y):
 
 def check():
     global checkTest, player
+    checkTest = 'false'
+    print('Is the king can move like a this piece? If 100 inside the move means a piece moving like this piece checked the king:')
     for ligne in range(8):
         for colonne in range(8):
             if Plateau[ligne][colonne] is not None:
@@ -516,7 +521,7 @@ def check():
                             print('CHECKED BY A KNIGHT')
                             break
                     queen = QueenObject.possibleMove(ligne, colonne, player)
-                    print('queenCheckMove:', queen)
+                    print('queenCheckMove', queen)
                     for i in range(0, len(queen), 2):
                         if queen[i] == 100:
                             checkTest = 'true'
@@ -529,6 +534,47 @@ def check():
                             checkTest = 'true'
                             print('CHECKED BY A KING')
                             break
+
+
+def checkMate():
+    global player, checkTest, checkMateTest
+    checkMateTest = 'false'
+    for ligne in range(8):
+        for colonne in range(8):
+            if Plateau[ligne][colonne] is not None:
+                if Plateau[ligne][colonne].color == player and Plateau[ligne][colonne].name == 'Queen':
+                    getPossibleMove = Plateau[ligne][colonne].possibleMove(ligne, colonne, Plateau[ligne][colonne].color)
+                    print('longueur du getPossibleMove de la Queen dans checkMate: ', len(getPossibleMove))
+                    # We save the old position of the piece
+                    oldPositionX = ligne
+                    oldPositionY = colonne
+
+                    for i in range(0, len(getPossibleMove), 2):
+                        # we copy the piece present on this position in the variable originalPiece
+                        originalPiece = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
+                        # We temporary move the piece object on the new Plateau position
+                        Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = Plateau[ligne][colonne]
+                        # we temporary define the new position of the piece object
+                        Plateau[ligne][colonne].row = getPossibleMove[i]
+                        Plateau[ligne][colonne].column = getPossibleMove[i + 1]
+
+                        # Is my King checked if I move like this?
+                        check()
+
+                        # we move the piece object on the old Plateau position
+                        Plateau[oldPositionX][oldPositionY] = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
+                        # we replace the original piece
+                        Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = originalPiece
+                        # we define the old position of the piece object
+                        Plateau[ligne][colonne].row = oldPositionX
+                        Plateau[ligne][colonne].column = oldPositionY
+                        if checkTest == 'true':
+                            checkMateTest = 'true'
+                            break
+    if checkMateTest == 'true':
+        print('CHECKMATE')
+    else:
+        print('NO CHECKMATE')
 
 #############################################
 # TKINTER - MAIN PROGRAM
@@ -545,6 +591,7 @@ player = 'white'
 isClick = 'false'
 PieceActivated = None
 checkTest = 'false'
+checkMateTest = 'false'
 
 whitePawn = PhotoImage(file="pictures/pawnW.gif")
 blackPawn = PhotoImage(file="pictures/pawnB.gif")
