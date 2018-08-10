@@ -386,7 +386,6 @@ def Click(event):
     if isClick == 'false':
 
         print("Click 1 OK!")
-        checkTest = 'false'
         Chessboard()
 
         # We get the position of the mouse click
@@ -462,14 +461,13 @@ def Click(event):
                 player = 'black'
                 # Is the opponent's King CheckMated?
                 checkMate()
+                checkTest = 'false'
                 return
             if player == 'black':
                 player = 'white'
                 # Is the opponent's King CheckMated?
                 checkMate()
-
-
-
+                checkTest = 'false'
         else:
             # The second click is NOT validated, we didn't enter in the if loop
             isClick = 'false'
@@ -486,7 +484,6 @@ def pair_list(getPossibleMoveList, X, Y):
 
 def check():
     global checkTest, player
-    checkTest = 'false'
     print('Is the king can move like a this piece? If 100 inside the move means a piece moving like this piece checked the king:')
     for ligne in range(8):
         for colonne in range(8):
@@ -575,6 +572,7 @@ def checkMate():
         print('CHECKMATE')
     else:
         print('NO CHECKMATE')
+    checkTest = 'false'
 
 #############################################
 # TKINTER - MAIN PROGRAM
