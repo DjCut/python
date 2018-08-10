@@ -410,6 +410,7 @@ def Click(event):
     else:
 
         print("Click 2 OK!")
+        checkTest = 'false'
 
         # We get the position of the mouse click
         positionX = Button.grid_info(event.widget)['row']
@@ -460,13 +461,17 @@ def Click(event):
             if player == 'white':
                 player = 'black'
                 # Is the opponent's King CheckMated?
-                checkMate()
+                check()
+                if checkTest == 'true':
+                    checkMate()
                 checkTest = 'false'
                 return
             if player == 'black':
                 player = 'white'
                 # Is the opponent's King CheckMated?
-                checkMate()
+                check()
+                if checkTest == 'true':
+                    checkMate()
                 checkTest = 'false'
         else:
             # The second click is NOT validated, we didn't enter in the if loop
@@ -535,44 +540,45 @@ def check():
 
 def checkMate():
     global player, checkTest, checkMateTest
-    checkMateTest = 'false'
+    checkMateTest = 'true'
+    checkTest = 'false'
     for ligne in range(8):
         for colonne in range(8):
             if Plateau[ligne][colonne] is not None:
                 if Plateau[ligne][colonne].color == player and Plateau[ligne][colonne].name == 'Queen':
                     getPossibleMove = Plateau[ligne][colonne].possibleMove(ligne, colonne, Plateau[ligne][colonne].color)
-                    print('longueur du getPossibleMove de la Queen dans checkMate: ', len(getPossibleMove))
-                    # We save the old position of the piece
-                    oldPositionX = ligne
-                    oldPositionY = colonne
+                    print('getPossibleMove de la Queen dans checkMate: ', getPossibleMove)
 
                     for i in range(0, len(getPossibleMove), 2):
+                        if getPossibleMove[i] == 100:
+                            continue
                         # we copy the piece present on this position in the variable originalPiece
                         originalPiece = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
                         # We temporary move the piece object on the new Plateau position
                         Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = Plateau[ligne][colonne]
-                        # we temporary define the new position of the piece object
-                        Plateau[ligne][colonne].row = getPossibleMove[i]
-                        Plateau[ligne][colonne].column = getPossibleMove[i + 1]
+                        Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].row = getPossibleMove[i]
+                        Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].column = getPossibleMove[i + 1]
 
                         # Is my King checked if I move like this?
                         check()
+                        print('checkTest: ', checkTest)
 
                         # we move the piece object on the old Plateau position
-                        Plateau[oldPositionX][oldPositionY] = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
+                        Plateau[ligne][colonne] = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
+                        Plateau[ligne][colonne].row = ligne
+                        Plateau[ligne][colonne].column = colonne
                         # we replace the original piece
                         Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = originalPiece
-                        # we define the old position of the piece object
-                        Plateau[ligne][colonne].row = oldPositionX
-                        Plateau[ligne][colonne].column = oldPositionY
-                        if checkTest == 'true':
-                            checkMateTest = 'true'
-                            break
-    if checkMateTest == 'true':
-        print('CHECKMATE')
-    else:
+
+                        if checkTest == 'false':
+                            checkMateTest = 'false'
+                        checkTest = 'false'
+
+    if checkMateTest == 'false':
         print('NO CHECKMATE')
-    checkTest = 'false'
+    else:
+        print('CHECKMATE')
+
 
 #############################################
 # TKINTER - MAIN PROGRAM
