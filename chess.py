@@ -542,37 +542,40 @@ def checkMate():
     global player, checkTest, checkMateTest
     checkMateTest = 'true'
     checkTest = 'false'
-    for ligne in range(8):
-        for colonne in range(8):
-            if Plateau[ligne][colonne] is not None:
-                if Plateau[ligne][colonne].color == player and Plateau[ligne][colonne].name == 'Queen':
-                    getPossibleMove = Plateau[ligne][colonne].possibleMove(ligne, colonne, Plateau[ligne][colonne].color)
-                    print('getPossibleMove de la Queen dans checkMate: ', getPossibleMove)
 
-                    for i in range(0, len(getPossibleMove), 2):
-                        if getPossibleMove[i] == 100:
-                            continue
-                        # we copy the piece present on this position in the variable originalPiece
-                        originalPiece = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
-                        # We temporary move the piece object on the new Plateau position
-                        Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = Plateau[ligne][colonne]
-                        Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].row = getPossibleMove[i]
-                        Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].column = getPossibleMove[i + 1]
+    pieceList = ['King', 'Queen', 'Knight', 'Bishop', 'Rook', 'Pawn']
+    for piece in pieceList:
+        for ligne in range(8):
+            for colonne in range(8):
+                if Plateau[ligne][colonne] is not None:
+                    if Plateau[ligne][colonne].color == player and Plateau[ligne][colonne].name == piece:
+                        getPossibleMove = Plateau[ligne][colonne].possibleMove(ligne, colonne, Plateau[ligne][colonne].color)
+                        print('getPossibleMove of', piece,'in the function checkMate: ', getPossibleMove)
 
-                        # Is my King checked if I move like this?
-                        check()
-                        print('checkTest: ', checkTest)
+                        for i in range(0, len(getPossibleMove), 2):
+                            if getPossibleMove[i] == 100:
+                                continue
+                            # we copy the piece present on this position in the variable originalPiece
+                            originalPiece = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
+                            # We temporary move the piece object on the new Plateau position
+                            Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = Plateau[ligne][colonne]
+                            Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].row = getPossibleMove[i]
+                            Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].column = getPossibleMove[i + 1]
 
-                        # we move the piece object on the old Plateau position
-                        Plateau[ligne][colonne] = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
-                        Plateau[ligne][colonne].row = ligne
-                        Plateau[ligne][colonne].column = colonne
-                        # we replace the original piece
-                        Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = originalPiece
+                            # Is my King checked if I move like this?
+                            check()
+                            print('checkTest: ', checkTest)
 
-                        if checkTest == 'false':
-                            checkMateTest = 'false'
-                        checkTest = 'false'
+                            # we move the piece object on the old Plateau position
+                            Plateau[ligne][colonne] = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
+                            Plateau[ligne][colonne].row = ligne
+                            Plateau[ligne][colonne].column = colonne
+                            # we replace the original piece
+                            Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = originalPiece
+
+                            if checkTest == 'false':
+                                checkMateTest = 'false'
+                            checkTest = 'false'
 
     if checkMateTest == 'false':
         print('NO CHECKMATE')
