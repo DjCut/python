@@ -393,7 +393,6 @@ def Click(event):
         positionY = Button.grid_info(event.widget)['column']
 
         PieceActivated = Plateau[positionX][positionY]
-        print(PieceActivated)
 
         if Plateau[positionX][positionY] is not None:
             # highlight
@@ -403,7 +402,7 @@ def Click(event):
             if Plateau[positionX][positionY].color == player:
                 isClick = 'true'
                 getPossibleMove = Plateau[positionX][positionY].possibleMove(positionX, positionY, Plateau[positionX][positionY].color)
-                print(getPossibleMove)
+                print('Possible Move:', getPossibleMove)
         else:
             print('No piece at row:', positionX, 'and column:', positionY)
 
@@ -429,7 +428,9 @@ def Click(event):
         PieceActivated.row = positionX
         PieceActivated.column = positionY
 
-        # Is my King checked if I move like this?
+        print('***************************************')
+        print('Is my King checked if I move like this?')
+
         check()
 
         # we remove the temporary graphical position of the piece
@@ -440,7 +441,6 @@ def Click(event):
         PieceActivated.row = oldPositionX
         PieceActivated.column = oldPositionY
 
-        print("Possible Move: ", getPossibleMove)
         if pair_list(getPossibleMove, positionX, positionY) == 'true' and checkTest == 'false':
             # we remove old graphical position of the piece
             Plateau[PieceActivated.row][PieceActivated.column] = None
@@ -449,9 +449,10 @@ def Click(event):
             # we define the new position of the piece object
             PieceActivated.row = positionX
             PieceActivated.column = positionY
-            print(PieceActivated)
-            print(PieceActivated.row, PieceActivated.column)
+
+            print('****************************************')
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'moved to row:', positionX,'and column:', positionY)
+            print('****************************************')
 
             # The second click is validated, we entered in the if loop
             isClick = 'false'
@@ -460,7 +461,7 @@ def Click(event):
             # Player change
             if player == 'white':
                 player = 'black'
-                # Is the opponent's King CheckMated?
+                print('Is the ennemy King CheckMated?')
                 check()
                 if checkTest == 'true':
                     checkMate()
@@ -468,7 +469,7 @@ def Click(event):
                 return
             if player == 'black':
                 player = 'white'
-                # Is the opponent's King CheckMated?
+                print('Is the ennemy King CheckMated?')
                 check()
                 if checkTest == 'true':
                     checkMate()
@@ -480,7 +481,6 @@ def Click(event):
 
 def pair_list(getPossibleMoveList, X, Y):
     moveAccepted = 'false'
-    print(len(getPossibleMoveList))
     for i in range(0, len(getPossibleMoveList), 2):
         if getPossibleMoveList[i] == X and getPossibleMoveList[i + 1] == Y:
             moveAccepted = 'true'
@@ -489,52 +489,59 @@ def pair_list(getPossibleMoveList, X, Y):
 
 def check():
     global checkTest, player
-    print('Is the king can move like this piece? If 100 inside the move means a piece moving like this piece checked the king:')
+    print('*******************************************************************************************************')
+    print('Is the king can move like this piece? If 100 inside, it means an ennemy piece moving like this check the king:')
     for ligne in range(8):
         for colonne in range(8):
             if Plateau[ligne][colonne] is not None:
                 if Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == player:
                     rook = RookObject.possibleMove(ligne, colonne, player)
-                    print('rookCheckMove:', rook)
+                    print('ROOK:', rook)
                     for i in range(0, len(rook), 2):
                         if rook[i] == 100:
                             checkTest = 'true'
-                            print('CHECKED BY A ROOK (or a Queen)')
+                            print('> CHECKED')
+                            print('')
                             break
                     bishop = BishopObject.possibleMove(ligne, colonne, player)
-                    print('bishopCheckMove:', bishop)
+                    print('BISHOP:', bishop)
                     for i in range(0, len(bishop), 2):
                         if bishop[i] == 100:
                             checkTest = 'true'
-                            print('CHECKED BY A BISHOP (or a Queen)')
+                            print('> CHECKED')
+                            print('')
                             break
                     pawn = PawnObject.possibleMove(ligne, colonne, player)
-                    print('pawnCheckMove:', pawn)
+                    print('PAWN:', pawn)
                     for i in range(0, len(pawn), 2):
                         if pawn[i] == 100:
                             checkTest = 'true'
-                            print('CHECKED BY A PAWN')
+                            print('> CHECKED')
+                            print('')
                             break
                     knight = KnightObject.possibleMove(ligne, colonne, player)
-                    print('knightCheckMove:', knight)
+                    print('KNIGHT:', knight)
                     for i in range(0, len(knight), 2):
                         if knight[i] == 100:
                             checkTest = 'true'
-                            print('CHECKED BY A KNIGHT')
+                            print('> CHECKED')
+                            print('')
                             break
                     queen = QueenObject.possibleMove(ligne, colonne, player)
-                    print('queenCheckMove', queen)
+                    print('QUEEN', queen)
                     for i in range(0, len(queen), 2):
                         if queen[i] == 100:
                             checkTest = 'true'
-                            print('CHECKED BY A QUEEN (or a Bishop, or a Rook)')
+                            print('> CHECKED')
+                            print('')
                             break
                     king = KingObject.possibleMove(ligne, colonne, player)
-                    print('kingCheckMove:', king)
+                    print('KING:', king)
                     for i in range(0, len(king), 2):
                         if king[i] == 100:
                             checkTest = 'true'
-                            print('CHECKED BY A KING')
+                            print('> CHECKED')
+                            print('')
                             break
 
 
@@ -550,6 +557,7 @@ def checkMate():
                 if Plateau[ligne][colonne] is not None:
                     if Plateau[ligne][colonne].color == player and Plateau[ligne][colonne].name == piece:
                         getPossibleMove = Plateau[ligne][colonne].possibleMove(ligne, colonne, Plateau[ligne][colonne].color)
+                        print('*************************************************************************')
                         print('getPossibleMove of', piece, 'in the function checkMate: ', getPossibleMove)
 
                         for i in range(0, len(getPossibleMove), 2):
@@ -564,7 +572,7 @@ def checkMate():
 
                             # Is my King checked if I move like this?
                             check()
-                            print('<<<checkTest>>>: ', checkTest)
+                            print('<<<RESULT of the CheckTest>>>: ', checkTest)
 
                             # we move the piece object on the old Plateau position
                             Plateau[ligne][colonne] = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
@@ -578,10 +586,16 @@ def checkMate():
                             checkTest = 'false'
 
     if checkMateTest == 'false':
-        print('NO CHECKMATE')
+        print('')
+        print('************************************************')
+        print('        CHECK: ', player, 'King is checked')
+        print('************************************************')
     else:
-        print('CHECKMATE')
-        print(player, 'player loose the game')
+        print('')
+        print('************************************************')
+        print('   CHECKMATE: ', player, 'player loose the game ')
+        print('************************************************')
+
 
 
 #############################################
