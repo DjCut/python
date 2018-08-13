@@ -34,7 +34,7 @@ class Pawn(Piece):
         possibleMove = []
 
         if color == 'black':
-            if positionX == 6 and Plateau[positionX - 1][positionY] is None:
+            if positionX == 6 and Plateau[positionX - 1][positionY] is None and Plateau[positionX - 2][positionY] is None:
                 possibleMove.append(positionX - 2)
                 possibleMove.append(positionY)
             if Plateau[positionX - 1][positionY] is None:
@@ -57,7 +57,7 @@ class Pawn(Piece):
                             possibleMove.append(100)
                             possibleMove.append(100)
         else:
-            if positionX == 1 and Plateau[positionX + 1][positionY] is None:
+            if positionX == 1 and Plateau[positionX + 1][positionY] is None and Plateau[positionX + 2][positionY] is None:
                 possibleMove.append(positionX + 2)
                 possibleMove.append(positionY)
             if Plateau[positionX + 1][positionY] is None:
@@ -489,7 +489,7 @@ def pair_list(getPossibleMoveList, X, Y):
 
 def check():
     global checkTest, player
-    print('Is the king can move like a this piece? If 100 inside the move means a piece moving like this piece checked the king:')
+    print('Is the king can move like this piece? If 100 inside the move means a piece moving like this piece checked the king:')
     for ligne in range(8):
         for colonne in range(8):
             if Plateau[ligne][colonne] is not None:
@@ -550,7 +550,7 @@ def checkMate():
                 if Plateau[ligne][colonne] is not None:
                     if Plateau[ligne][colonne].color == player and Plateau[ligne][colonne].name == piece:
                         getPossibleMove = Plateau[ligne][colonne].possibleMove(ligne, colonne, Plateau[ligne][colonne].color)
-                        print('getPossibleMove of', piece,'in the function checkMate: ', getPossibleMove)
+                        print('getPossibleMove of', piece, 'in the function checkMate: ', getPossibleMove)
 
                         for i in range(0, len(getPossibleMove), 2):
                             if getPossibleMove[i] == 100:
@@ -564,7 +564,7 @@ def checkMate():
 
                             # Is my King checked if I move like this?
                             check()
-                            print('checkTest: ', checkTest)
+                            print('<<<checkTest>>>: ', checkTest)
 
                             # we move the piece object on the old Plateau position
                             Plateau[ligne][colonne] = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
@@ -581,6 +581,7 @@ def checkMate():
         print('NO CHECKMATE')
     else:
         print('CHECKMATE')
+        print(player, 'player loose the game')
 
 
 #############################################
