@@ -12,6 +12,8 @@ from tkinter import *
 
 # On initialise le plateau 8*8 avec des x
 Plateau = [[None]*8 for i in range(8)]
+button = [[None]*8 for i in range(8)]
+
 
 #############################################
 # CLASS
@@ -345,31 +347,37 @@ def Chessboard():
                     bg = 'true'
 
             if Plateau[ligne][colonne] is None:
-                Button(Window, width=8, height=4, text='', bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                if start == 'true':
+                    button[ligne][colonne] = tkinter.Button(Window, width=8, height=4, text='', bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                else:
+                    button[ligne][colonne]
             elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whitePawn, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                if start == 'true':
+                    button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=whitePawn, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                else:
+                    button[ligne][colonne]
             elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackPawn, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=blackPawn, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteRook, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=whiteRook, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackRook, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=blackRook, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteKnight, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=whiteKnight, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackKnight, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=blackKnight, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteBishop, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=whiteBishop, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackBishop, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=blackBishop, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteQueen, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=whiteQueen, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackQueen, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=blackQueen, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteKing, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=whiteKing, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
             elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackKing, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                button[ligne][colonne] = tkinter.Button(Window, width=60, height=60, image=blackKing, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
 
 
 def rightClick(event):
@@ -381,12 +389,13 @@ def rightClick(event):
 
 def Click(event):
 
-    global isClick, player, PieceActivated, getPossibleMove, checkTest
+    global isClick, player, PieceActivated, getPossibleMove, checkTest, start
+
+    start = 'false'
 
     if isClick == 'false':
 
         print("Click 1 OK!")
-        Chessboard()
 
         # We get the position of the mouse click
         positionX = Button.grid_info(event.widget)['row']
@@ -396,7 +405,7 @@ def Click(event):
 
         if Plateau[positionX][positionY] is not None:
             # highlight
-            Button(Window, width=60, height=60, image=eval(''.join([PieceActivated.color, PieceActivated.name])), bg='gold', borderwidth=0).grid(row=positionX, column=positionY)
+            #Button(Window, width=60, height=60, image=eval(''.join([PieceActivated.color, PieceActivated.name])), bg='gold', borderwidth=0).grid(row=positionX, column=positionY)
 
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
             if Plateau[positionX][positionY].color == player:
@@ -456,9 +465,11 @@ def Click(event):
 
             # The second click is validated, we entered in the if loop
             isClick = 'false'
+
             # we refresh the board
             Chessboard()
-            # Player change
+
+            # Player change and checkMate Test
             if player == 'white':
                 player = 'black'
                 print('Is the ennemy King CheckMated?')
@@ -609,24 +620,25 @@ Window = Tk()
 # VARIABLES
 #############################################
 
+start = 'true'
 player = 'white'
 isClick = 'false'
 PieceActivated = None
 checkTest = 'false'
 checkMateTest = 'false'
 
-whitePawn = PhotoImage(file="pictures/pawnW.gif")
-blackPawn = PhotoImage(file="pictures/pawnB.gif")
-whiteRook = PhotoImage(file="pictures/rookW.gif")
-blackRook = PhotoImage(file="pictures/rookB.gif")
-whiteKnight = PhotoImage(file="pictures/knightW.gif")
-blackKnight = PhotoImage(file="pictures/knightB.gif")
-whiteBishop = PhotoImage(file="pictures/bishopW.gif")
-blackBishop = PhotoImage(file="pictures/bishopB.gif")
-whiteQueen = PhotoImage(file="pictures/queenW.gif")
-blackQueen = PhotoImage(file="pictures/queenB.gif")
-whiteKing = PhotoImage(file="pictures/kingW.gif")
-blackKing = PhotoImage(file="pictures/kingB.gif")
+whitePawn = tkinter.PhotoImage(file="pictures/pawnW.gif")
+blackPawn = tkinter.PhotoImage(file="pictures/pawnB.gif")
+whiteRook = tkinter.PhotoImage(file="pictures/rookW.gif")
+blackRook = tkinter.PhotoImage(file="pictures/rookB.gif")
+whiteKnight = tkinter.PhotoImage(file="pictures/knightW.gif")
+blackKnight = tkinter.PhotoImage(file="pictures/knightB.gif")
+whiteBishop = tkinter.PhotoImage(file="pictures/bishopW.gif")
+blackBishop = tkinter.PhotoImage(file="pictures/bishopB.gif")
+whiteQueen = tkinter.PhotoImage(file="pictures/queenW.gif")
+blackQueen = tkinter.PhotoImage(file="pictures/queenB.gif")
+whiteKing = tkinter.PhotoImage(file="pictures/kingW.gif")
+blackKing = tkinter.PhotoImage(file="pictures/kingB.gif")
 
 ##################################
 # Affichage du Plateau de jeu
