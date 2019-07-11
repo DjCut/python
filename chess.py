@@ -6,12 +6,25 @@
 import tkinter
 from tkinter import *
 
+
 #############################################
 # PLATEAU
 #############################################
 
 # On initialise le plateau 8*8 avec des x
 Plateau = [[None]*8 for i in range(8)]
+
+#############################################
+# VARIABLES
+#############################################
+
+player = 'white'
+isClick = 'false'
+PieceActivated = None
+checkTest = 'false'
+checkMateTest = 'false'
+littleRockInProgress = False
+bigRockInProgress = False
 
 #############################################
 # CLASS
@@ -33,7 +46,7 @@ class Pawn(Piece):
     def possibleMove(self, positionX, positionY, color):
         possibleMove = []
 
-        if color == 'black':
+        if color == 'white':
             if positionX == 6 and Plateau[positionX - 1][positionY] is None and Plateau[positionX - 2][positionY] is None:
                 possibleMove.append(positionX - 2)
                 possibleMove.append(positionY)
@@ -247,8 +260,11 @@ class King(Piece):
     def __init__(self, row, column, color):
         Piece.__init__(self, row, column, color)
         self.name = 'King'
+        self.littleRock = True
+        self.bigRock = True
 
     def possibleMove(self, positionX, positionY, color):
+        global littleRockInProgress, bigRockInProgress
         possibleMove = []
 
         for i in range(-1, 2):
@@ -266,6 +282,15 @@ class King(Piece):
                     else:
                         possibleMove.append(X)
                         possibleMove.append(Y)
+        # Rock
+        if Plateau[positionX][positionY].littleRock == True and Plateau[positionX][positionY+1] is None and Plateau[positionX][positionY+2] is None:
+            possibleMove.append(positionX)
+            possibleMove.append(positionY+2)
+            littleRockInProgress = True
+        if Plateau[positionX][positionY].bigRock == True and Plateau[positionX][positionY-1] is None and Plateau[positionX][positionY-2] is None and Plateau[positionX][positionY-3] is None:
+            possibleMove.append(positionX)
+            possibleMove.append(positionY-2)
+            bigRockInProgress = True
 
         return possibleMove
 
@@ -288,39 +313,39 @@ KnightObject = Knight(10, 10, 'red')
 QueenObject = Queen(10, 10, 'red')
 KingObject = King(10, 10, 'red')
 
-# initialize white pawns
-for i in range(0, 8):
-    Plateau[1][i] = Pawn(1, i, 'white')
-
 # initialize black pawns
 for i in range(0, 8):
-    Plateau[6][i] = Pawn(6, i, 'black')
+    Plateau[1][i] = Pawn(1, i, 'black')
+
+# initialize white pawns
+for i in range(0, 8):
+    Plateau[6][i] = Pawn(6, i, 'white')
 
 # initialize rooks
-Plateau[0][0] = Rook(0, 0, 'white')
-Plateau[0][7] = Rook(0, 7, 'white')
-Plateau[7][0] = Rook(7, 0, 'black')
-Plateau[7][7] = Rook(7, 7, 'black')
+Plateau[0][0] = Rook(0, 0, 'black')
+Plateau[0][7] = Rook(0, 7, 'black')
+Plateau[7][0] = Rook(7, 0, 'white')
+Plateau[7][7] = Rook(7, 7, 'white')
 
 # initialize knights
-Plateau[0][1] = Knight(0, 1, 'white')
-Plateau[0][6] = Knight(0, 6, 'white')
-Plateau[7][1] = Knight(7, 1, 'black')
-Plateau[7][6] = Knight(7, 6, 'black')
+Plateau[0][1] = Knight(0, 1, 'black')
+Plateau[0][6] = Knight(0, 6, 'black')
+Plateau[7][1] = Knight(7, 1, 'white')
+Plateau[7][6] = Knight(7, 6, 'white')
 
 # initialize Bishops
-Plateau[0][2] = Bishop(0, 2, 'white')
-Plateau[0][5] = Bishop(0, 5, 'white')
-Plateau[7][2] = Bishop(7, 2, 'black')
-Plateau[7][5] = Bishop(7, 5, 'black')
+Plateau[0][2] = Bishop(0, 2, 'black')
+Plateau[0][5] = Bishop(0, 5, 'black')
+Plateau[7][2] = Bishop(7, 2, 'white')
+Plateau[7][5] = Bishop(7, 5, 'white')
 
 # initialize Queens
-Plateau[0][4] = Queen(0, 4, 'white')
-Plateau[7][4] = Queen(7, 4, 'black')
+Plateau[0][3] = Queen(0, 3, 'black')
+Plateau[7][3] = Queen(7, 3, 'white')
 
 # initialize Kings
-Plateau[0][3] = King(0, 3, 'white')
-Plateau[7][3] = King(7, 3, 'black')
+Plateau[0][4] = King(0, 4, 'black')
+Plateau[7][4] = King(7, 4, 'white')
 
 ##################################
 # Fonctions
@@ -333,7 +358,7 @@ def Chessboard():
 
     for ligne in range(8):
         for colonne in range(8):
-
+           
             # Damier du plateau
             if bg == 'true':
                 background = 'bisque2'
@@ -381,7 +406,7 @@ def rightClick(event):
 
 def Click(event):
 
-    global isClick, player, PieceActivated, getPossibleMove, checkTest
+    global isClick, player, PieceActivated, getPossibleMove, checkTest, littleRockInProgress, bigRockInProgress
 
     if isClick == 'false':
 
@@ -419,6 +444,20 @@ def Click(event):
         oldPositionX = PieceActivated.row
         oldPositionY = PieceActivated.column
 
+        # Rock
+        if littleRockInProgress == True:                                
+            # we temporary move the piece object on the new Plateau position
+            originalPiece = Plateau[positionX][positionY-1]
+            Plateau[positionX][positionY-1] = PieceActivated
+            # we temporary define the new position of the piece object
+            PieceActivated.row = positionX
+            PieceActivated.column = positionY-1
+        
+            print('***************************************')
+            print('Is my King checked if I move like this?')
+
+            check()             
+
         # we temporary remove old graphical position of the piece
         Plateau[PieceActivated.row][PieceActivated.column] = None
         # we temporary move the piece object on the new Plateau position
@@ -431,8 +470,8 @@ def Click(event):
         print('***************************************')
         print('Is my King checked if I move like this?')
 
-        check()
-
+        check()        
+          
         # we remove the temporary graphical position of the piece
         Plateau[positionX][positionY] = originalPiece
         # we move the piece object on the old Plateau position
@@ -453,9 +492,36 @@ def Click(event):
             print('****************************************')
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'moved to row:', positionX,'and column:', positionY)
             print('****************************************')
+            
+            # Check if the Rooks or the King are moving, then disable Rock
+            if player == 'white':
+                if Plateau[positionX][positionY].name == King:
+                    Plateau[7][4].littleRock = False
+                    Plateau[7][4].bigRock = False
+                if  Plateau[positionX][positionY].name == Rook and positionY == 0:
+                    Plateau[7][4].bigRock = False
+                if  Plateau[positionX][positionY].name == Rook and positionY == 7:
+                    Plateau[7][4].littleRock = False       
+            elif player == 'black':
+                if Plateau[positionX][positionY].name == King:
+                    Plateau[0][4].littleRock = False
+                    Plateau[0][4].bigRock = False
+                if  Plateau[positionX][positionY].name == Rook and positionY == 0:
+                    Plateau[0][4].bigRock = False
+                if  Plateau[positionX][positionY].name == Rook and positionY == 7:
+                    Plateau[0][4].littleRock = False 
 
             # The second click is validated, we entered in the if loop
             isClick = 'false'
+            # Rock
+            if littleRockInProgress == True:
+                littleRockInProgress = False 
+                Plateau[positionX][positionY].littleRock = False
+                Plateau[positionX][positionY].bigRock = False 
+            elif bigRockInProgress == True:
+                bigRockInProgress = False 
+                Plateau[positionX][positionY].littleRock = False
+                Plateau[positionX][positionY].bigRock = False    
             # we refresh the board
             Chessboard()
             # Player change
@@ -477,6 +543,8 @@ def Click(event):
         else:
             # The second click is NOT validated, we didn't enter in the if loop
             isClick = 'false'
+            littleRockInProgress = False 
+            bigRockInProgress = False 
 
 
 def pair_list(getPossibleMoveList, X, Y):
@@ -599,21 +667,16 @@ def checkMate():
 
 
 #############################################
-# TKINTER - MAIN PROGRAM
+# tkinter - MAIN PROGRAM
 #############################################
 
 
 Window = Tk()
 
-#############################################
-# VARIABLES
-#############################################
 
-player = 'white'
-isClick = 'false'
-PieceActivated = None
-checkTest = 'false'
-checkMateTest = 'false'
+#############################################
+# Images
+#############################################
 
 whitePawn = PhotoImage(file="pictures/pawnW.gif")
 blackPawn = PhotoImage(file="pictures/pawnB.gif")
