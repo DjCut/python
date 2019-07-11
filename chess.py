@@ -414,13 +414,7 @@ def rightClick(event):
 
 def Click(event):
 
-<<<<<<< HEAD
     global isClick, player, PieceActivated, getPossibleMove, checkTest, littleRockInProgress, bigRockInProgress
-=======
-    global isClick, player, PieceActivated, getPossibleMove, checkTest, start
-
-    start = 'false'
->>>>>>> 4a50bcd3aa0d4f0d82586d745540e906d1667d05
 
     if isClick == 'false':
 
@@ -526,7 +520,6 @@ def Click(event):
 
             # The second click is validated, we entered in the if loop
             isClick = 'false'
-<<<<<<< HEAD
             # Rock
             if littleRockInProgress == True:
                 littleRockInProgress = False 
@@ -536,9 +529,6 @@ def Click(event):
                 bigRockInProgress = False 
                 Plateau[positionX][positionY].littleRock = False
                 Plateau[positionX][positionY].bigRock = False    
-=======
-
->>>>>>> 4a50bcd3aa0d4f0d82586d745540e906d1667d05
             # we refresh the board
             Chessboard()
 
@@ -696,7 +686,6 @@ Window = Tk()
 # Images
 #############################################
 
-<<<<<<< HEAD
 whitePawn = PhotoImage(file="pictures/pawnW.gif")
 blackPawn = PhotoImage(file="pictures/pawnB.gif")
 whiteRook = PhotoImage(file="pictures/rookW.gif")
@@ -709,27 +698,6 @@ whiteQueen = PhotoImage(file="pictures/queenW.gif")
 blackQueen = PhotoImage(file="pictures/queenB.gif")
 whiteKing = PhotoImage(file="pictures/kingW.gif")
 blackKing = PhotoImage(file="pictures/kingB.gif")
-=======
-start = 'true'
-player = 'white'
-isClick = 'false'
-PieceActivated = None
-checkTest = 'false'
-checkMateTest = 'false'
-
-whitePawn = tkinter.PhotoImage(file="pictures/pawnW.gif")
-blackPawn = tkinter.PhotoImage(file="pictures/pawnB.gif")
-whiteRook = tkinter.PhotoImage(file="pictures/rookW.gif")
-blackRook = tkinter.PhotoImage(file="pictures/rookB.gif")
-whiteKnight = tkinter.PhotoImage(file="pictures/knightW.gif")
-blackKnight = tkinter.PhotoImage(file="pictures/knightB.gif")
-whiteBishop = tkinter.PhotoImage(file="pictures/bishopW.gif")
-blackBishop = tkinter.PhotoImage(file="pictures/bishopB.gif")
-whiteQueen = tkinter.PhotoImage(file="pictures/queenW.gif")
-blackQueen = tkinter.PhotoImage(file="pictures/queenB.gif")
-whiteKing = tkinter.PhotoImage(file="pictures/kingW.gif")
-blackKing = tkinter.PhotoImage(file="pictures/kingB.gif")
->>>>>>> 4a50bcd3aa0d4f0d82586d745540e906d1667d05
 
 ##################################
 # Affichage du Plateau de jeu
