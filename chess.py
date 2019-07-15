@@ -532,10 +532,30 @@ def Click(event):
                 littleRockInProgress = False 
                 Plateau[positionX][positionY].littleRock = False
                 Plateau[positionX][positionY].bigRock = False 
+                 # Move the Rook
+                # we remove old graphical position of the rook
+                littleRock = None
+                littleRock = Plateau[positionX][7]
+                Plateau[positionX][7] = None
+                # we move the piece object on the new Plateau position
+                Plateau[positionX][5] = littleRock
+                # we define the new position of the piece object
+                littleRock.row = positionX
+                littleRock.column = 5
             elif bigRockInProgress == True:
                 bigRockInProgress = False 
                 Plateau[positionX][positionY].littleRock = False
-                Plateau[positionX][positionY].bigRock = False    
+                Plateau[positionX][positionY].bigRock = False  
+                # Move the Rook
+                # we remove old graphical position of the rook
+                bigRock = None
+                bigRock = Plateau[positionX][0]
+                Plateau[positionX][0] = None
+                # we move the piece object on the new Plateau position
+                Plateau[positionX][3] = bigRock
+                # we define the new position of the piece object
+                bigRock.row = positionX
+                bigRock.column = 3  
             # we refresh the board
             Chessboard()
 
@@ -618,14 +638,14 @@ def check():
                             print('> CHECKED')
                             print('')
                             break
-                    king = KingObject.possibleMove(ligne, colonne, player)
-                    print('KING:', king)
-                    for i in range(0, len(king), 2):
-                        if king[i] == 100:
-                            checkTest = 'true'
-                            print('> CHECKED')
-                            print('')
-                            break
+                    #king = KingObject.possibleMove(ligne, colonne, player)
+                    #print('KING:', king)
+                    #for i in range(0, len(king), 2):
+                    #    if king[i] == 100:
+                    #        checkTest = 'true'
+                    #        print('> CHECKED')
+                    #        print('')
+                    #        break
 
 
 def checkMate():
