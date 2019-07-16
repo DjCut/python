@@ -446,7 +446,7 @@ def Click(event):
         oldPositionY = PieceActivated.column
 
         # Rock
-        if littleRockInProgress == True:                                
+        if littleRockInProgress == True and positionX == 0 and positionY == 6:          
             # we temporary move the piece object on the new Plateau position
             originalPiece = Plateau[positionX][positionY-1]
             Plateau[positionX][positionY-1] = PieceActivated
@@ -457,9 +457,17 @@ def Click(event):
             print('***************************************')
             print('Is my King checked if I move like this?')
 
-            check()       
+            check()
 
-        if bigRockInProgress == True:                                
+            # we remove the temporary graphical position of the piece
+            Plateau[positionX][positionY-1] = originalPiece
+            # we move the piece object on the old Plateau position
+            Plateau[oldPositionX][oldPositionY] = PieceActivated
+            # we define the old position of the piece object
+            PieceActivated.row = oldPositionX
+            PieceActivated.column = oldPositionY 
+
+        if bigRockInProgress == True and positionX == 0 and positionY == 2:                                
             # we temporary move the piece object on the new Plateau position
             originalPiece = Plateau[positionX][positionY+1]
             Plateau[positionX][positionY+1] = PieceActivated
@@ -471,6 +479,14 @@ def Click(event):
             print('Is my King checked if I move like this?')
 
             check()          
+
+            # we remove the temporary graphical position of the piece
+            Plateau[positionX][positionY+1] = originalPiece
+            # we move the piece object on the old Plateau position
+            Plateau[oldPositionX][oldPositionY] = PieceActivated
+            # we define the old position of the piece object
+            PieceActivated.row = oldPositionX
+            PieceActivated.column = oldPositionY 
 
         # we temporary remove old graphical position of the piece
         Plateau[PieceActivated.row][PieceActivated.column] = None
@@ -495,6 +511,29 @@ def Click(event):
         PieceActivated.column = oldPositionY
 
         if pair_list(getPossibleMove, positionX, positionY) == 'true' and checkTest == 'false':
+            
+            # Check if the Rooks or the King are moving, then disable Rock
+            if player == 'white':
+                if Plateau[PieceActivated.row][PieceActivated.column].name == 'King':
+                    Plateau[PieceActivated.row][PieceActivated.column].littleRock = False
+                    Plateau[PieceActivated.row][PieceActivated.column].bigRock = False
+                if  Plateau[PieceActivated.row][PieceActivated.column].name == 'Rook' and PieceActivated.column == 0:
+                    x,y = whereIsTheKing()
+                    Plateau[x][y].bigRock = False
+                if  Plateau[PieceActivated.row][PieceActivated.column].name == 'Rook' and PieceActivated.column == 7:
+                    x,y = whereIsTheKing()
+                    Plateau[x][y].littleRock = False
+            else:
+                if Plateau[PieceActivated.row][PieceActivated.column].name == 'King':
+                    Plateau[PieceActivated.row][PieceActivated.column].littleRock = False
+                    Plateau[PieceActivated.row][PieceActivated.column].bigRock = False
+                if  Plateau[PieceActivated.row][PieceActivated.column].name == 'Rook' and PieceActivated.column == 0:
+                    x,y = whereIsTheKing()
+                    Plateau[x][y].bigRock = False
+                if  Plateau[PieceActivated.row][PieceActivated.column].name == 'Rook' and PieceActivated.column == 7:
+                    x,y = whereIsTheKing()
+                    Plateau[x][y].littleRock = False
+
             # we remove old graphical position of the piece
             Plateau[PieceActivated.row][PieceActivated.column] = None
             # we move the piece object on the new Plateau position
@@ -507,55 +546,43 @@ def Click(event):
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'moved to row:', positionX,'and column:', positionY)
             print('****************************************')
             
-            # Check if the Rooks or the King are moving, then disable Rock
-            if player == 'white':
-                if Plateau[positionX][positionY].name == King:
-                    Plateau[7][4].littleRock = False
-                    Plateau[7][4].bigRock = False
-                if  Plateau[positionX][positionY].name == Rook and positionY == 0:
-                    Plateau[7][4].bigRock = False
-                if  Plateau[positionX][positionY].name == Rook and positionY == 7:
-                    Plateau[7][4].littleRock = False       
-            elif player == 'black':
-                if Plateau[positionX][positionY].name == King:
-                    Plateau[0][4].littleRock = False
-                    Plateau[0][4].bigRock = False
-                if  Plateau[positionX][positionY].name == Rook and positionY == 0:
-                    Plateau[0][4].bigRock = False
-                if  Plateau[positionX][positionY].name == Rook and positionY == 7:
-                    Plateau[0][4].littleRock = False 
-
             # The second click is validated, we entered in the if loop
             isClick = 'false'
+            
             # Rock
             if littleRockInProgress == True:
                 littleRockInProgress = False 
                 Plateau[positionX][positionY].littleRock = False
                 Plateau[positionX][positionY].bigRock = False 
                  # Move the Rook
-                # we remove old graphical position of the rook
-                littleRock = None
-                littleRock = Plateau[positionX][7]
-                Plateau[positionX][7] = None
-                # we move the piece object on the new Plateau position
-                Plateau[positionX][5] = littleRock
-                # we define the new position of the piece object
-                littleRock.row = positionX
-                littleRock.column = 5
+                if Plateau[positionX][6] != None:
+                    if Plateau[positionX][6].name == 'King':
+                        # we remove old graphical position of the rook
+                        littleRock = None
+                        littleRock = Plateau[positionX][7]
+                        Plateau[positionX][7] = None
+                        # we move the piece object on the new Plateau position
+                        Plateau[positionX][5] = littleRock
+                        # we define the new position of the piece object
+                        littleRock.row = positionX
+                        littleRock.column = 5
             elif bigRockInProgress == True:
                 bigRockInProgress = False 
                 Plateau[positionX][positionY].littleRock = False
                 Plateau[positionX][positionY].bigRock = False  
                 # Move the Rook
-                # we remove old graphical position of the rook
-                bigRock = None
-                bigRock = Plateau[positionX][0]
-                Plateau[positionX][0] = None
-                # we move the piece object on the new Plateau position
-                Plateau[positionX][3] = bigRock
-                # we define the new position of the piece object
-                bigRock.row = positionX
-                bigRock.column = 3  
+                if Plateau[positionX][2] != None:
+                    if Plateau[positionX][2].name == 'King':
+                        # we remove old graphical position of the rook
+                        bigRock = None
+                        bigRock = Plateau[positionX][0]
+                        Plateau[positionX][0] = None
+                        # we move the piece object on the new Plateau position
+                        Plateau[positionX][3] = bigRock
+                        # we define the new position of the piece object
+                        bigRock.row = positionX
+                        bigRock.column = 3  
+
             # we refresh the board
             Chessboard()
 
@@ -588,6 +615,14 @@ def pair_list(getPossibleMoveList, X, Y):
         if getPossibleMoveList[i] == X and getPossibleMoveList[i + 1] == Y:
             moveAccepted = 'true'
     return moveAccepted
+
+def whereIsTheKing():
+    for ligne in range(8):
+        for colonne in range(8):
+            if Plateau[ligne][colonne] != None:
+                if Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == player:
+                    return ligne,colonne
+                    break
 
 
 def check():
