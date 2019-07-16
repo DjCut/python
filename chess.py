@@ -96,6 +96,8 @@ class Pawn(Piece):
                             possibleMove.append(100)
 
         return possibleMove
+    
+    #def promote()
 
 
 class Rook(Piece):
@@ -541,6 +543,12 @@ def Click(event):
             # we define the new position of the piece object
             PieceActivated.row = positionX
             PieceActivated.column = positionY
+
+            # Promote pawn
+            if PieceActivated.name == 'Pawn' and PieceActivated.row == 0 and player == 'white':
+                Plateau[positionX][positionY] = Queen(positionX, positionY, 'white')
+            if PieceActivated.name == 'Pawn' and PieceActivated.row == 7 and player == 'black':
+                Plateau[positionX][positionY] = Queen(positionX, positionY, 'black')        
 
             print('****************************************')
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'moved to row:', positionX,'and column:', positionY)
