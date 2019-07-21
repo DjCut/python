@@ -3,9 +3,9 @@
 # PROGRAM
 #############################################
 
-import tkinter
+import tkinter as tk
 from tkinter import *
-
+root = tk.Tk()
 
 #############################################
 # PLATEAU
@@ -358,47 +358,35 @@ Plateau[7][4] = King(7, 4, 'white')
 
 def Chessboard():
 
-    bg = 'false'
-
     for ligne in range(8):
         for colonne in range(8):
            
-            # Damier du plateau
-            if bg == 'true':
-                background = 'bisque2'
-                if colonne != 7:
-                    bg = 'false'
-            else:
-                background = 'white'
-                if colonne != 7:
-                    bg = 'true'
-
             if Plateau[ligne][colonne] is None:
-                Button(Window, width=8, height=4, text='', bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                print("nothing here")
             elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whitePawn, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whitePawn, tags=("Pawn", i, j))
             elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackPawn, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackPawn)
             elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteRook, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteRook)
             elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackRook, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackRook)
             elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteKnight, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteKnight)      
             elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackKnight, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackKnight)
             elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteBishop, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteBishop)
             elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackBishop, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackBishop)
             elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteQueen, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteQueen)
             elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackQueen, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackQueen)
             elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'white':
-                Button(Window, width=60, height=60, image=whiteKing, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteKing)
             elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'black':
-                Button(Window, width=60, height=60, image=blackKing, bg=background, borderwidth=0).grid(row=ligne, column=colonne)
+                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackKing)
 
 
 def rightClick(event):
@@ -417,14 +405,19 @@ def Click(event):
         print("Click 1 OK!")
 
         # We get the position of the mouse click
-        positionX = Button.grid_info(event.widget)['row']
-        positionY = Button.grid_info(event.widget)['column']
+        positionX = event.x
+        positionY = event.y
+        print(positionX)
+        print(positionY)
+        #print('{}, {}'.format(positionX, positionY))
+        item = canvas.find_closest(event.x, event.y)
+        print(item)
 
         PieceActivated = Plateau[positionX][positionY]
 
         if Plateau[positionX][positionY] is not None:
             # highlight
-            Button(Window, width=60, height=60, image=eval(''.join([PieceActivated.color, PieceActivated.name])), bg='gold', borderwidth=0).grid(row=positionX, column=positionY)
+            #Button(Window, width=60, height=60, image=eval(''.join([PieceActivated.color, PieceActivated.name])), bg='gold', borderwidth=0).grid(row=positionX, column=positionY)
 
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
             if Plateau[positionX][positionY].color == player:
@@ -749,8 +742,26 @@ def checkMate():
 #############################################
 
 
-Window = Tk()
+canvas = tk.Canvas(root, 
+           width=1240, 
+           height=840)
+canvas.pack()
 
+#test = canvas.find_withtag(CURRENT)
+#print(test)
+
+# Creation du damier
+color = True
+for i in range(20, 820, 100):
+    for j in range(20, 820, 100):
+        if color == False:
+            canvas.create_rectangle(i, j, i+100, j+100, fill="grey")
+            if j != 720:
+                color = True
+        elif color == True:
+            canvas.create_rectangle(i, j, i+100, j+100, fill="white")
+            if j != 720:
+                color = False
 
 #############################################
 # Images
@@ -772,12 +783,14 @@ blackKing = PhotoImage(file="pictures/kingB.gif")
 ##################################
 # Affichage du Plateau de jeu
 ##################################
+coordinate=Chessboard
+print(coordinate)
 
 Chessboard()
 
 # Left Click calls the function Click
-Window.bind("<Button-1>", Click)
+canvas.bind("<Button-1>", Click)
 # Right click cancel the first click
-Window.bind("<Button-3>", rightClick)
+canvas.bind("<Button-3>", rightClick)
 # Loop
-Window.mainloop()
+root.mainloop()
