@@ -357,36 +357,51 @@ Plateau[7][4] = King(7, 4, 'white')
 
 
 def Chessboard():
+    
+    canvas.delete("all")
+    
+    # Creation du damier
+    color = True
+    for j in range(0, 520, 65):
+        for i in range(0, 520, 65):
+            if color == False:
+                canvas.create_rectangle(i, j, i+65, j+65, fill="grey", tags=("damier", i, j))
+                if i != 455:
+                    color = True
+            elif color == True:
+                canvas.create_rectangle(i, j, i+65, j+65, fill="white", tags=("damier", i, j))
+                if i != 455:
+                    color = False
 
     for ligne in range(8):
         for colonne in range(8):
            
             if Plateau[ligne][colonne] is None:
-                print("nothing here")
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=empty, tags=("empty", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'white':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whitePawn, tags=("Pawn", i, j))
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=whitePawn, tags=("whitePawn", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'Pawn' and Plateau[ligne][colonne].color == 'black':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackPawn)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=blackPawn, tags=("blackPawn", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'white':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteRook)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=whiteRook, tags=("whiteRook", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'Rook' and Plateau[ligne][colonne].color == 'black':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackRook)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=blackRook, tags=("blackRook", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'white':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteKnight)      
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=whiteKnight, tags=("whiteKnight", ligne, colonne))      
             elif Plateau[ligne][colonne].name == 'Knight' and Plateau[ligne][colonne].color == 'black':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackKnight)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=blackKnight, tags=("blackKnight", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'white':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteBishop)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=whiteBishop, tags=("whiteBishop", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'Bishop' and Plateau[ligne][colonne].color == 'black':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackBishop)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=blackBishop, tags=("blackBishop", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'white':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteQueen)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=whiteQueen, tags=("whiteQueen", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'Queen' and Plateau[ligne][colonne].color == 'black':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackQueen)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=blackQueen, tags=("blackQueen", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'white':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=whiteKing)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=whiteKing, tags=("whiteKing", ligne, colonne))
             elif Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == 'black':
-                canvas.create_image(colonne*100+20,ligne*100+20, anchor=NW, image=blackKing)
+                canvas.create_image(colonne*65,ligne*65, anchor=NW, image=blackKing, tags=("blackKing", ligne, colonne))
 
 
 def rightClick(event):
@@ -399,25 +414,23 @@ def rightClick(event):
 def Click(event):
 
     global isClick, player, PieceActivated, getPossibleMove, checkTest, littleRockInProgress, bigRockInProgress
-
+    Chessboard()
+    
     if isClick == 'false':
 
         print("Click 1 OK!")
-
+        
         # We get the position of the mouse click
-        positionX = event.x
-        positionY = event.y
-        print(positionX)
-        print(positionY)
-        #print('{}, {}'.format(positionX, positionY))
         item = canvas.find_closest(event.x, event.y)
-        print(item)
+        positionX = int(canvas.gettags(item)[1])
+        positionY = int(canvas.gettags(item)[2])
 
         PieceActivated = Plateau[positionX][positionY]
 
-        if Plateau[positionX][positionY] is not None:
+        if Plateau[positionX][positionY] is not None and Plateau[positionX][positionY].color == player:
             # highlight
-            #Button(Window, width=60, height=60, image=eval(''.join([PieceActivated.color, PieceActivated.name])), bg='gold', borderwidth=0).grid(row=positionX, column=positionY)
+            damier = item[0]-64
+            canvas.itemconfig(damier, fill="gold")
 
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
             if Plateau[positionX][positionY].color == player:
@@ -433,8 +446,9 @@ def Click(event):
         checkTest = 'false'
 
         # We get the position of the mouse click
-        positionX = Button.grid_info(event.widget)['row']
-        positionY = Button.grid_info(event.widget)['column']
+        item = canvas.find_closest(event.x, event.y)
+        positionX = int(canvas.gettags(item)[1])
+        positionY = int(canvas.gettags(item)[2])
 
         # We save the old position of the piece activated
         oldPositionX = PieceActivated.row
@@ -743,25 +757,10 @@ def checkMate():
 
 
 canvas = tk.Canvas(root, 
-           width=1240, 
-           height=840)
+           width=520, 
+           height=680)
 canvas.pack()
 
-#test = canvas.find_withtag(CURRENT)
-#print(test)
-
-# Creation du damier
-color = True
-for i in range(20, 820, 100):
-    for j in range(20, 820, 100):
-        if color == False:
-            canvas.create_rectangle(i, j, i+100, j+100, fill="grey")
-            if j != 720:
-                color = True
-        elif color == True:
-            canvas.create_rectangle(i, j, i+100, j+100, fill="white")
-            if j != 720:
-                color = False
 
 #############################################
 # Images
@@ -779,6 +778,7 @@ whiteQueen = PhotoImage(file="pictures/queenW.gif")
 blackQueen = PhotoImage(file="pictures/queenB.gif")
 whiteKing = PhotoImage(file="pictures/kingW.gif")
 blackKing = PhotoImage(file="pictures/kingB.gif")
+empty = PhotoImage(file="pictures/empty.gif")
 
 ##################################
 # Affichage du Plateau de jeu
