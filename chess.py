@@ -21,10 +21,11 @@ button = [[None]*8 for i in range(8)]
 #############################################
 
 player = 'white'
-isClick = 'false'
+turn = 1
+isClick = False
 PieceActivated = None
-checkTest = 'false'
-checkMateTest = 'false'
+checkTest = False
+checkMateTest = False
 littleRockInProgress = False
 bigRockInProgress = False
 
@@ -406,17 +407,17 @@ def Chessboard():
 
 def rightClick(event):
     global isClick
-    isClick = 'false'
+    isClick = False
     # remove highlight of the activated piece by refreshing the screen
     Chessboard()
 
 
 def Click(event):
 
-    global isClick, player, PieceActivated, getPossibleMove, checkTest, littleRockInProgress, bigRockInProgress
+    global isClick, player, turn, PieceActivated, getPossibleMove, checkTest, littleRockInProgress, bigRockInProgress
     Chessboard()
     
-    if isClick == 'false':
+    if isClick == False:
 
         print("Click 1 OK!")
         
@@ -434,7 +435,7 @@ def Click(event):
 
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
             if Plateau[positionX][positionY].color == player:
-                isClick = 'true'
+                isClick = True
                 getPossibleMove = Plateau[positionX][positionY].possibleMove(positionX, positionY, Plateau[positionX][positionY].color)
                 print('Possible Move:', getPossibleMove)
         else:
@@ -443,7 +444,7 @@ def Click(event):
     else:
 
         print("Click 2 OK!")
-        checkTest = 'false'
+        checkTest = False
 
         # We get the position of the mouse click
         item = canvas.find_closest(event.x, event.y)
@@ -455,7 +456,7 @@ def Click(event):
         oldPositionY = PieceActivated.column
 
         # Rock
-        if littleRockInProgress == True and positionX == 0 and positionY == 6:          
+        if littleRockInProgress == True and positionX == 0 and positionY == 6:
             # we temporary move the piece object on the new Plateau position
             originalPiece = Plateau[positionX][positionY-1]
             Plateau[positionX][positionY-1] = PieceActivated
@@ -476,7 +477,7 @@ def Click(event):
             PieceActivated.row = oldPositionX
             PieceActivated.column = oldPositionY 
 
-        if bigRockInProgress == True and positionX == 0 and positionY == 2:                                
+        if bigRockInProgress == True and positionX == 0 and positionY == 2:
             # we temporary move the piece object on the new Plateau position
             originalPiece = Plateau[positionX][positionY+1]
             Plateau[positionX][positionY+1] = PieceActivated
@@ -519,7 +520,7 @@ def Click(event):
         PieceActivated.row = oldPositionX
         PieceActivated.column = oldPositionY
 
-        if pair_list(getPossibleMove, positionX, positionY) == 'true' and checkTest == 'false':
+        if pair_list(getPossibleMove, positionX, positionY) == True and checkTest == False:
             
             # Check if the Rooks or the King are moving, then disable Rock
             if player == 'white':
@@ -562,7 +563,7 @@ def Click(event):
             print('****************************************')
             
             # The second click is validated, we entered in the if loop
-            isClick = 'false'
+            isClick = False
             
             # Rock
             if littleRockInProgress == True:
@@ -606,29 +607,31 @@ def Click(event):
                 player = 'black'
                 print('Is the ennemy King CheckMated?')
                 check()
-                if checkTest == 'true':
+                if checkTest == True:
                     checkMate()
-                checkTest = 'false'
+                checkTest = False
                 return
             if player == 'black':
                 player = 'white'
                 print('Is the ennemy King CheckMated?')
                 check()
-                if checkTest == 'true':
+                if checkTest == True:
                     checkMate()
-                checkTest = 'false'
+                checkTest = False
+                turn += 1
+                print(turn)
         else:
             # The second click is NOT validated, we didn't enter in the if loop
-            isClick = 'false'
+            isClick = False
             littleRockInProgress = False 
             bigRockInProgress = False 
 
 
 def pair_list(getPossibleMoveList, X, Y):
-    moveAccepted = 'false'
+    moveAccepted = False
     for i in range(0, len(getPossibleMoveList), 2):
         if getPossibleMoveList[i] == X and getPossibleMoveList[i + 1] == Y:
-            moveAccepted = 'true'
+            moveAccepted = True
     return moveAccepted
 
 def whereIsTheKing():
@@ -652,7 +655,7 @@ def check():
                     print('ROOK:', rook)
                     for i in range(0, len(rook), 2):
                         if rook[i] == 100:
-                            checkTest = 'true'
+                            checkTest = True
                             print('> CHECKED')
                             print('')
                             break
@@ -660,7 +663,7 @@ def check():
                     print('BISHOP:', bishop)
                     for i in range(0, len(bishop), 2):
                         if bishop[i] == 100:
-                            checkTest = 'true'
+                            checkTest = True
                             print('> CHECKED')
                             print('')
                             break
@@ -668,7 +671,7 @@ def check():
                     print('PAWN:', pawn)
                     for i in range(0, len(pawn), 2):
                         if pawn[i] == 100:
-                            checkTest = 'true'
+                            checkTest = True
                             print('> CHECKED')
                             print('')
                             break
@@ -676,7 +679,7 @@ def check():
                     print('KNIGHT:', knight)
                     for i in range(0, len(knight), 2):
                         if knight[i] == 100:
-                            checkTest = 'true'
+                            checkTest = True
                             print('> CHECKED')
                             print('')
                             break
@@ -684,7 +687,7 @@ def check():
                     print('QUEEN', queen)
                     for i in range(0, len(queen), 2):
                         if queen[i] == 100:
-                            checkTest = 'true'
+                            checkTest = True
                             print('> CHECKED')
                             print('')
                             break
@@ -692,7 +695,7 @@ def check():
                     print('KING:', king)
                     for i in range(0, len(king), 2):
                         if king[i] == 100:
-                            checkTest = 'true'
+                            checkTest = True
                             print('> CHECKED')
                             print('')
                             break
@@ -700,8 +703,8 @@ def check():
 
 def checkMate():
     global player, checkTest, checkMateTest
-    checkMateTest = 'true'
-    checkTest = 'false'
+    checkMateTest = True
+    checkTest = False
 
     pieceList = ['King', 'Queen', 'Knight', 'Bishop', 'Rook', 'Pawn']
     for piece in pieceList:
@@ -723,8 +726,7 @@ def checkMate():
                             Plateau[ligne][colonne] = None
                             Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].row = getPossibleMove[i]
                             Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].column = getPossibleMove[i + 1]
-                            x,y=whereIsTheKing()
-                            print('King is here:',x,y)
+
                             # Is my King checked if I move like this?
                             check()
                             print('<<<RESULT of the CheckTest>>>: ', checkTest)
@@ -736,11 +738,11 @@ def checkMate():
                             # we replace the original piece
                             Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = originalPiece
 
-                            if checkTest == 'false':
-                                checkMateTest = 'false'
-                            checkTest = 'false'
+                            if checkTest == False:
+                                checkMateTest = False
+                            checkTest = False
 
-    if checkMateTest == 'false':
+    if checkMateTest == False:
         print('')
         print('************************************************')
         print('        CHECK: ', player, 'King is checked')
@@ -757,36 +759,32 @@ def checkMate():
 # tkinter - MAIN PROGRAM
 #############################################
 
-
 canvas = tk.Canvas(root, 
            width=520, 
            height=680)
 canvas.pack()
 
-
 #############################################
 # Images
 #############################################
 
-whitePawn = PhotoImage(file="pictures/pawnW.gif")
-blackPawn = PhotoImage(file="pictures/pawnB.gif")
-whiteRook = PhotoImage(file="pictures/rookW.gif")
-blackRook = PhotoImage(file="pictures/rookB.gif")
-whiteKnight = PhotoImage(file="pictures/knightW.gif")
-blackKnight = PhotoImage(file="pictures/knightB.gif")
-whiteBishop = PhotoImage(file="pictures/bishopW.gif")
-blackBishop = PhotoImage(file="pictures/bishopB.gif")
-whiteQueen = PhotoImage(file="pictures/queenW.gif")
-blackQueen = PhotoImage(file="pictures/queenB.gif")
-whiteKing = PhotoImage(file="pictures/kingW.gif")
-blackKing = PhotoImage(file="pictures/kingB.gif")
-empty = PhotoImage(file="pictures/empty.gif")
+whitePawn   =   PhotoImage(file="pictures/pawnW.gif")
+blackPawn   =   PhotoImage(file="pictures/pawnB.gif")
+whiteRook   =   PhotoImage(file="pictures/rookW.gif")
+blackRook   =   PhotoImage(file="pictures/rookB.gif")
+whiteKnight =   PhotoImage(file="pictures/knightW.gif")
+blackKnight =   PhotoImage(file="pictures/knightB.gif")
+whiteBishop =   PhotoImage(file="pictures/bishopW.gif")
+blackBishop =   PhotoImage(file="pictures/bishopB.gif")
+whiteQueen  =   PhotoImage(file="pictures/queenW.gif")
+blackQueen  =   PhotoImage(file="pictures/queenB.gif")
+whiteKing   =   PhotoImage(file="pictures/kingW.gif")
+blackKing   =   PhotoImage(file="pictures/kingB.gif")
+empty       =   PhotoImage(file="pictures/empty.gif")
 
 ##################################
 # Affichage du Plateau de jeu
 ##################################
-coordinate=Chessboard
-print(coordinate)
 
 Chessboard()
 
