@@ -688,14 +688,14 @@ def check():
                             print('> CHECKED')
                             print('')
                             break
-                    #king = KingObject.possibleMove(ligne, colonne, player)
-                    #print('KING:', king)
-                    #for i in range(0, len(king), 2):
-                    #    if king[i] == 100:
-                    #        checkTest = 'true'
-                    #        print('> CHECKED')
-                    #        print('')
-                    #        break
+                    king = KingObject.possibleMove(ligne, colonne, player)
+                    print('KING:', king)
+                    for i in range(0, len(king), 2):
+                        if king[i] == 100:
+                            checkTest = 'true'
+                            print('> CHECKED')
+                            print('')
+                            break
 
 
 def checkMate():
@@ -720,9 +720,11 @@ def checkMate():
                             originalPiece = Plateau[getPossibleMove[i]][getPossibleMove[i + 1]]
                             # We temporary move the piece object on the new Plateau position
                             Plateau[getPossibleMove[i]][getPossibleMove[i + 1]] = Plateau[ligne][colonne]
+                            Plateau[ligne][colonne] = None
                             Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].row = getPossibleMove[i]
                             Plateau[getPossibleMove[i]][getPossibleMove[i + 1]].column = getPossibleMove[i + 1]
-
+                            x,y=whereIsTheKing()
+                            print('King is here:',x,y)
                             # Is my King checked if I move like this?
                             check()
                             print('<<<RESULT of the CheckTest>>>: ', checkTest)
