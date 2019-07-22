@@ -450,13 +450,14 @@ def Click(event):
         item = canvas.find_closest(event.x, event.y)
         positionX = int(canvas.gettags(item)[1])
         positionY = int(canvas.gettags(item)[2])
+        print('We get the position of the mouse click', positionX, positionY)
 
         # We save the old position of the piece activated
         oldPositionX = PieceActivated.row
         oldPositionY = PieceActivated.column
 
         # Rock
-        if littleRockInProgress == True and positionX == 0 and positionY == 6:
+        if littleRockInProgress == True and positionY == 6:
             # we temporary move the piece object on the new Plateau position
             originalPiece = Plateau[positionX][positionY-1]
             Plateau[positionX][positionY-1] = PieceActivated
@@ -477,7 +478,7 @@ def Click(event):
             PieceActivated.row = oldPositionX
             PieceActivated.column = oldPositionY 
 
-        if bigRockInProgress == True and positionX == 0 and positionY == 2:
+        if bigRockInProgress == True and positionY == 2:
             # we temporary move the piece object on the new Plateau position
             originalPiece = Plateau[positionX][positionY+1]
             Plateau[positionX][positionY+1] = PieceActivated
@@ -691,14 +692,14 @@ def check():
                             print('> CHECKED')
                             print('')
                             break
-                    king = KingObject.possibleMove(ligne, colonne, player)
-                    print('KING:', king)
-                    for i in range(0, len(king), 2):
-                        if king[i] == 100:
-                            checkTest = True
-                            print('> CHECKED')
-                            print('')
-                            break
+                    #king = KingObject.possibleMove(ligne, colonne, player)
+                    #print('KING:', king)
+                    #for i in range(0, len(king), 2):
+                    #    if king[i] == 100:
+                    #        checkTest = True
+                    #        print('> CHECKED')
+                    #        print('')
+                    #        break
 
 
 def checkMate():
