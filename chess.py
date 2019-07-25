@@ -13,13 +13,17 @@ root = tk.Tk()
 
 # On initialise le plateau 8*8 avec des x
 Plateau = [[None]*8 for i in range(8)]
+# On initialise le dictionnaire de pieces capturees
+CapturedPieces = {}
 
 #############################################
 # VARIABLES
 #############################################
 
 player = 'white'
+move = 0
 turn = 1
+Rule50Moves = 0
 isClick = False
 PieceActivated = None
 checkTest = False
@@ -412,7 +416,7 @@ def rightClick(event):
 
 def Click(event):
 
-    global isClick, player, turn, PieceActivated, getPossibleMove, checkTest, littleRockInProgress, bigRockInProgress
+    global isClick, player, Rule50Moves, move, turn, PieceActivated, getPossibleMove, checkTest, littleRockInProgress, bigRockInProgress
     Chessboard()
     
     if isClick == False:
@@ -546,6 +550,9 @@ def Click(event):
 
                 # we remove old graphical position of the piece
                 Plateau[PieceActivated.row][PieceActivated.column] = None
+                # we check if a piece exists on the new Plateau position
+                if Plateau[positionX][positionY] != None:
+                    CapturedPieces.update({move:Plateau[positionX][positionY]})
                 # we move the piece object on the new Plateau position
                 Plateau[positionX][positionY] = PieceActivated
                 # we define the new position of the piece object
@@ -561,7 +568,18 @@ def Click(event):
                 print('****************************************')
                 print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'moved to row:', positionX,'and column:', positionY)
                 print('****************************************')
+
+                # Rule 50 moves
+                if Plateau[positionX][positionY].name == 'Pawn' or move in CapturedPieces:
+                    Rule50Moves = 0
+                else:
+                    Rule50Moves += 1
                 
+                #if move in CapturedPieces:
+                    #print('****************************************')
+                    #print(Plateau[8][turn].color, Plateau[8][turn].name, 'has been captured')
+                    #print('****************************************')
+
                 # The second click is validated, we entered in the if loop
                 isClick = False
                 
@@ -610,6 +628,11 @@ def Click(event):
                     if checkTest == True:
                         checkMate()
                     checkTest = False
+                    drawForRule50Moves()
+                    isItPat()
+                    move += 1
+                    print ('Move number:', move)
+                    print('Rule50Moves:', Rule50Moves)
                     return
                 if player == 'black':
                     player = 'white'
@@ -618,8 +641,13 @@ def Click(event):
                     if checkTest == True:
                         checkMate()
                     checkTest = False
+                    isItPat()
+                    drawForRule50Moves()
+                    move += 1
+                    print ('Move number:', move)
+                    print('Rule50Moves:', Rule50Moves)
                     turn += 1
-                    print(turn)
+                    print('Turn number:', turn)
             else:
                 # The checkTest is True
                 isClick = False
@@ -629,6 +657,65 @@ def Click(event):
             # The second click is NOT validated, we didn't enter in the if loop
             isClick = False
 
+def drawForRule50Moves():
+    if Rule50Moves == 50:
+        draw()
+
+def isItPat():
+    global player, checkTest
+    thisIsPat = True
+    thisIsReallyNotPat = False
+    for ligne in range(8):
+        for colonne in range(8):           
+            if Plateau[ligne][colonne] != None and Plateau[ligne][colonne].color == player:
+                getPossibleMove = Plateau[ligne][colonne].possibleMove(ligne, colonne, player)
+                if len(getPossibleMove) != 0 and Plateau[ligne][colonne].name != 'King':
+                    thisIsPat = False
+                if Plateau[ligne][colonne].name == 'King':
+                    if len(getPossibleMove) != 0:
+                        PieceActivated = Plateau[ligne][colonne]
+                        # We save the old position of the piece activated
+                        oldPositionX = PieceActivated.row
+                        oldPositionY = PieceActivated.column
+                        checkTest = False
+                        for i in range(0, len(getPossibleMove), 2):
+                            # we temporary remove old graphical position of the piece
+                            Plateau[PieceActivated.row][PieceActivated.column] = None
+                            # we temporary move the piece object on the new Plateau position
+                            originalPiece = Plateau[getPossibleMove[i]][getPossibleMove[i+1]]
+                            Plateau[getPossibleMove[i]][getPossibleMove[i+1]] = PieceActivated
+                            # we temporary define the new position of the piece object
+                            PieceActivated.row = getPossibleMove[i]
+                            PieceActivated.column = getPossibleMove[i+1]
+
+                            print('***************************************')
+                            print('Is my King checked if I move like this?')
+
+                            check()        
+                            
+                            # we remove the temporary graphical position of the piece
+                            Plateau[getPossibleMove[i]][getPossibleMove[i+1]] = originalPiece
+                            # we move the piece object on the old Plateau position
+                            Plateau[oldPositionX][oldPositionY] = PieceActivated
+                            # we define the old position of the piece object
+                            PieceActivated.row = oldPositionX
+                            PieceActivated.column = oldPositionY
+                            
+                            if checkTest == False:    
+                                thisIsPat = False            
+                                thisIsReallyNotPat = True
+                            else:
+                                thisIsPat = True   
+                    elif len(getPossibleMove) == 0:
+                        thisIsPat = True 
+    if thisIsPat == True and thisIsReallyNotPat == False:
+        draw()                    
+
+def draw():
+    print('')
+    print('************************************************')
+    print('**********************DRAW**********************')
+    print('************************************************')
 
 def pair_list(getPossibleMoveList, X, Y):
     moveAccepted = False
@@ -644,7 +731,6 @@ def whereIsTheKing():
                 if Plateau[ligne][colonne].name == 'King' and Plateau[ligne][colonne].color == player:
                     return ligne,colonne
                     break
-
 
 def check():
     global checkTest, player
@@ -764,7 +850,7 @@ def checkMate():
 
 canvas = tk.Canvas(root, 
            width=520, 
-           height=680)
+           height=520)
 canvas.pack()
 
 #############################################
