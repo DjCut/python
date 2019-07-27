@@ -3,6 +3,8 @@
 # PROGRAM
 #############################################
 
+import sys
+thisFunctionName = sys._getframe(   ).f_code.co_name
 import tkinter as tk
 from tkinter import *
 root = tk.Tk()
@@ -289,15 +291,19 @@ class King(Piece):
                     else:
                         possibleMove.append(X)
                         possibleMove.append(Y)
-        # Rock
-        if Plateau[positionX][positionY].littleRock == True and Plateau[positionX][positionY+1] is None and Plateau[positionX][positionY+2] is None:
-            possibleMove.append(positionX)
-            possibleMove.append(positionY+2)
-            littleRockInProgress = True
-        if Plateau[positionX][positionY].bigRock == True and Plateau[positionX][positionY-1] is None and Plateau[positionX][positionY-2] is None and Plateau[positionX][positionY-3] is None:
-            possibleMove.append(positionX)
-            possibleMove.append(positionY-2)
-            bigRockInProgress = True
+            # Do this only if the caller function is click (not isItPat or check)
+            caller = sys._getframe(1).f_code.co_name
+            print(caller)
+            if caller == 'Click':
+                # Rock
+                if Plateau[positionX][positionY].littleRock == True and Plateau[positionX][positionY+1] is None and Plateau[positionX][positionY+2] is None:
+                    possibleMove.append(positionX)
+                    possibleMove.append(positionY+2)
+                    littleRockInProgress = True
+                if Plateau[positionX][positionY].bigRock == True and Plateau[positionX][positionY-1] is None and Plateau[positionX][positionY-2] is None and Plateau[positionX][positionY-3] is None:
+                    possibleMove.append(positionX)
+                    possibleMove.append(positionY-2)
+                    bigRockInProgress = True
 
         return possibleMove
 
@@ -630,6 +636,7 @@ def Click(event):
                     checkTest = False
                     drawForRule50Moves()
                     isItPat()
+                    twoKings()
                     move += 1
                     print ('Move number:', move)
                     print('Rule50Moves:', Rule50Moves)
@@ -642,9 +649,10 @@ def Click(event):
                         checkMate()
                     checkTest = False
                     isItPat()
+                    twoKings()
                     drawForRule50Moves()
                     move += 1
-                    print ('Move number:', move)
+                    print('Move number:', move)
                     print('Rule50Moves:', Rule50Moves)
                     turn += 1
                     print('Turn number:', turn)
@@ -660,6 +668,15 @@ def Click(event):
 def drawForRule50Moves():
     if Rule50Moves == 50:
         draw()
+
+def twoKings():
+    pieceNumber = 0
+    for ligne in range(8):
+        for colonne in range(8):           
+            if Plateau[ligne][colonne] != None:
+                pieceNumber += 1
+    if pieceNumber == 2:
+        draw()    
 
 def isItPat():
     global player, checkTest
@@ -677,10 +694,10 @@ def isItPat():
                         # We save the old position of the piece activated
                         oldPositionX = PieceActivated.row
                         oldPositionY = PieceActivated.column
-                        checkTest = False
                         for i in range(0, len(getPossibleMove), 2):
+                            checkTest = False
                             # we temporary remove old graphical position of the piece
-                            Plateau[PieceActivated.row][PieceActivated.column] = None
+                            Plateau[oldPositionX][oldPositionY] = None
                             # we temporary move the piece object on the new Plateau position
                             originalPiece = Plateau[getPossibleMove[i]][getPossibleMove[i+1]]
                             Plateau[getPossibleMove[i]][getPossibleMove[i+1]] = PieceActivated
