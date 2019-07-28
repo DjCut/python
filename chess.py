@@ -590,11 +590,10 @@ def Click(event):
                 isClick = False
                 
                 # Rock
-                if littleRockInProgress == True:
+                if littleRockInProgress == True or bigRockInProgress == True:
                     littleRockInProgress = False 
-                    Plateau[positionX][positionY].littleRock = False
-                    Plateau[positionX][positionY].bigRock = False 
-                    # Move the Rook
+                    bigRockInProgress = False 
+                    # Move the Rook for littleRock
                     if Plateau[positionX][6] != None:
                         if Plateau[positionX][6].name == 'King':
                             # we remove old graphical position of the rook
@@ -606,11 +605,9 @@ def Click(event):
                             # we define the new position of the piece object
                             littleRock.row = positionX
                             littleRock.column = 5
-                elif bigRockInProgress == True:
-                    bigRockInProgress = False 
-                    Plateau[positionX][positionY].littleRock = False
-                    Plateau[positionX][positionY].bigRock = False  
-                    # Move the Rook
+                            Plateau[positionX][positionY].littleRock = False
+                            Plateau[positionX][positionY].bigRock = False 
+                    # Move the Rook for bigRock
                     if Plateau[positionX][2] != None:
                         if Plateau[positionX][2].name == 'King':
                             # we remove old graphical position of the rook
@@ -622,6 +619,8 @@ def Click(event):
                             # we define the new position of the piece object
                             bigRock.row = positionX
                             bigRock.column = 3  
+                            Plateau[positionX][positionY].littleRock = False
+                            Plateau[positionX][positionY].bigRock = False 
 
                 # we refresh the board
                 Chessboard()
