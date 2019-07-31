@@ -26,6 +26,9 @@ player = 'white'
 move = 0
 turn = 1
 Rule50Moves = 0
+Pawn2 = False
+Pawn2X = 0
+Pawn2Y = 0
 isClick = False
 PieceActivated = None
 checkTest = False
@@ -51,6 +54,7 @@ class Pawn(Piece):
         self.name = 'Pawn'
 
     def possibleMove(self, positionX, positionY, color):
+        global Pawn2Y
         possibleMove = []
 
         if color == 'white':
@@ -76,6 +80,9 @@ class Pawn(Piece):
                         if Plateau[positionX - 1][positionY + 1].name == 'Pawn':
                             possibleMove.append(100)
                             possibleMove.append(100)
+            if Pawn2 == True and positionX == 3 and positionY == (Pawn2Y - 1) or positionY == (Pawn2Y + 1):
+                possibleMove.append(positionX - 1)
+                possibleMove.append(Pawn2Y)
         else:
             if positionX == 1 and Plateau[positionX + 1][positionY] is None and Plateau[positionX + 2][positionY] is None:
                 possibleMove.append(positionX + 2)
@@ -99,7 +106,9 @@ class Pawn(Piece):
                         if Plateau[positionX + 1][positionY + 1].name == 'Pawn':
                             possibleMove.append(100)
                             possibleMove.append(100)
-
+            if Pawn2 == True and positionX == 4 and positionY == (Pawn2Y - 1) or positionY == (Pawn2Y + 1):
+                possibleMove.append(positionX + 1)
+                possibleMove.append(Pawn2Y)
         return possibleMove
     
     #def promote()
@@ -422,7 +431,8 @@ def rightClick(event):
 
 def Click(event):
 
-    global isClick, player, Rule50Moves, move, turn, PieceActivated, getPossibleMove, checkTest, littleRockInProgress, bigRockInProgress
+    global isClick, player, Rule50Moves, move, turn, PieceActivated, getPossibleMove, checkTest, littleRockInProgress, bigRockInProgress, Pawn2, Pawn2X, Pawn2Y
+    
     Chessboard()
     
     if isClick == False:
@@ -442,6 +452,7 @@ def Click(event):
             canvas.itemconfig(damier, fill="gold")
 
             print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'at row:', positionX,'and column:', positionY)
+
             if Plateau[positionX][positionY].color == player:
                 isClick = True
                 getPossibleMove = Plateau[positionX][positionY].possibleMove(positionX, positionY, Plateau[positionX][positionY].color)
@@ -575,9 +586,24 @@ def Click(event):
                 print(Plateau[positionX][positionY].color, Plateau[positionX][positionY].name, 'moved to row:', positionX,'and column:', positionY)
                 print('****************************************')
 
+                # Prise en passant
+                if Plateau[positionX][positionY].name == 'Pawn' and Pawn2 == True and positionY == Pawn2Y:
+                    if player == 'black':
+                        Plateau[positionX-1][positionY] = None
+                        CapturedPieces.update({move:Plateau[positionX-1][positionY]})
+                    else:
+                        Plateau[positionX+1][positionY] = None
+                        CapturedPieces.update({move:Plateau[positionX+1][positionY]})    
+                Pawn2 = False
+                if Plateau[positionX][positionY].name == 'Pawn':
+                    if (oldPositionX == 1 and positionX == 3) or (oldPositionX == 6 and positionX == 4): 
+                        Pawn2 = True
+                        Pawn2X = positionX
+                        Pawn2Y = positionY
+
                 # Rule 50 moves
                 if Plateau[positionX][positionY].name == 'Pawn' or move in CapturedPieces:
-                    Rule50Moves = 0
+                    Rule50Moves = 0                    
                 else:
                     Rule50Moves += 1
                 
@@ -857,7 +883,6 @@ def checkMate():
         print('************************************************')
         print('   CHECKMATE: ', player, 'player loose the game ')
         print('************************************************')
-
 
 
 #############################################
